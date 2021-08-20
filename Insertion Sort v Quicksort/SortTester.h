@@ -4,6 +4,7 @@
 #include <functional>
 #include <string>
 #include <map>
+#include <vector>
 
 unsigned constexpr amountToTest = 6;
 
@@ -23,6 +24,9 @@ public:
 
 	bool startTest();
 
+	const std::map<std::string, TimeCompleted>& getResults() const { return _times; }
+	const std::vector<std::string>& getBadSorts() const { return _badSorts; }
+
 private:
 	unsigned _testAmount = 0;
 
@@ -32,4 +36,6 @@ private:
 	std::list<int> _reverseSortedData;
 
 	std::map<std::string, TimeCompleted> _times;
+	std::vector<std::string> _badSorts;
+
 };

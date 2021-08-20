@@ -4,7 +4,6 @@
 #include <random>
 #include <thread>
 #include <exception>
-#include <vector>
 #include <future>
 
 SortTester::SortTester(unsigned long dataSize)
@@ -60,6 +59,7 @@ bool SortTester::startTest()
 					//Check that vakues are correctly sorted
 					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
 					{
+						_badSorts.push_back(i.first);
 						return false;
 					}
 
@@ -83,6 +83,7 @@ bool SortTester::startTest()
 
 					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
 					{
+						_badSorts.push_back(i.first);
 						return false;
 					}
 
@@ -106,6 +107,7 @@ bool SortTester::startTest()
 
 					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
 					{
+						_badSorts.push_back(i.first);
 						return false;
 					}
 
@@ -117,13 +119,14 @@ bool SortTester::startTest()
 	}
 
 	//Return true only if all tests passed
+	bool success = true;
 	for (auto& i : threads)
 	{
 		if (!i.get())
 		{
-			return false;
+			success = false;
 		}
 	}
 
-	return true;
+	return success;
 }
