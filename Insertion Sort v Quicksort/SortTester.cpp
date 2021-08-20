@@ -40,11 +40,10 @@ bool SortTester::startTest()
 
 	for (auto& i : _sortFuncs)
 	{
-		
 		//pre-construct TimeCompleted to prevent race conditions
 		_times.emplace(i.first, TimeCompleted());
 
-		//Unsorted data
+		//Unsorted data----------------------------------------------------------------------
 		threads.push_back
 		(
 			std::async
@@ -68,7 +67,7 @@ bool SortTester::startTest()
 				}
 			)
 		);
-		//Sorted data
+		//Sorted data-------------------------------------------------------------------------
 		threads.push_back
 		(
 			std::async
@@ -91,7 +90,7 @@ bool SortTester::startTest()
 				}
 			)
 		);
-		//Reverse sorted data
+		//Reverse sorted data----------------------------------------------------------------
 		threads.push_back
 		(
 			std::async
