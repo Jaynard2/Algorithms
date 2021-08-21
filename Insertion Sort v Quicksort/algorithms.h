@@ -4,41 +4,57 @@
 #include <list>
 #include <algorithm>
 #include <vector>
+#include <iterator>
 
 class TestingAlgorithms{
 public:
 	static void quickSort(std::list<int> collection) {
-		int pivotIndex = rand() % (collection.size() - 1);
-		auto pivot = collection.begin();
-		std::advance(pivot, pivotIndex);
-		std::list<int> lower = qSort(&collection, pivot);
-		if(collection.size() > 1) {
-			quickSort(collection);
-		}
-		if (lower.size() > 1) {
-			quickSort(lower);
-		}
-		collection.merge(lower);
+		sorter_quick(collection, collection.begin(), --collection.end());
 	};
 
-	static std::list<int> qSort(std::list<int>* collection, std::list<int>::iterator pivot) {
-		std::list<int> lower = std::list<int>();
-		std::vector<std::list<int>::iterator> tobeRemoved = std::vector<std::list<int>::iterator>();
-		for (auto i = collection->begin(); i != collection->end(); i++) {
-			if (*i < *pivot) {
-				lower.push_back(*i);
-				tobeRemoved.push_back(i);
+	static void sorter_quick(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end) {
+		int pivotIndex = rand() % (std::distance(begin, end));
+		auto pivot = begin;
+		std::advance(pivot, pivotIndex);
+		int copyCounter = 0;
+		for (auto i = begin; i != pivot; i) {
+			if (*i > *pivot) {
+				collection.insert(std::next(pivot), *i);
+				if (begin == i) {
+					begin++;
+				}
+				i++;
+				copyCounter++;
+				collection.erase(std::prev(i));
+			}
+			else {
+				i++;
 			}
 		}
-		if (lower.size() == 0) {
-			lower.push_back(*pivot);
-			tobeRemoved.push_back(pivot);
+		auto stop = std::next(pivot, copyCounter);
+		for (auto i = end; i != stop; i) {
+			if (*i < *pivot) {
+				collection.insert(pivot, *i);
+				if (end == i) {
+					end--;
+				}
+				else if (begin == pivot) {
+					begin--;
+				}
+				i--;
+				collection.erase(std::next(i));
+			}
+			else {
+				i--;
+			}
 		}
-		for (int i = 0; i < tobeRemoved.size(); i++) {
-			collection->erase(tobeRemoved[i]);
+		if(begin != pivot && std::next(begin) != pivot){
+			sorter_quick(collection, begin, pivot);
 		}
-		return lower;
-	};
+		if (end != pivot++ && end != pivot) {
+			sorter_quick(collection, pivot, end);
+		}
+	}
 
 	static void quickSort_modified(std::list<int> collection) {
 		const int count = 3;
