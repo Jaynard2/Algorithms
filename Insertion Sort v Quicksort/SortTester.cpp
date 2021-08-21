@@ -6,7 +6,7 @@
 #include <exception>
 #include <future>
 
-SortTester::SortTester(unsigned long dataSize)
+SortTester::SortTester(unsigned long dataSize) : _sortFuncs(), _times()
 {
 	//Make vectors large enough to hold all data
 	_testData.resize(dataSize);
@@ -20,7 +20,7 @@ SortTester::SortTester(unsigned long dataSize)
 	
 	//Create sorted data for comparison and sorted runs
 	std::copy(_testData.begin(), _testData.end(), _sortedData.begin());
-	//std::sort(_sortedData.begin(), _sortedData.end());
+	_sortedData.sort();
 	std::reverse_copy(_sortedData.begin(), _sortedData.end(), _reverseSortedData.begin());
 }
 
@@ -62,59 +62,59 @@ bool SortTester::startTest()
 						return false;
 					}
 
-					_times.at(i.first).unsorted = end-start;
+					_times.at(i.first).unsorted = end - start;
 					return true;
 				}
 			)
 		);
 		//Sorted data-------------------------------------------------------------------------
-	//	threads.push_back
-	//	(
-	//		std::async
-	//		(
-	//			[&] 
-	//			{
-	//				auto dataCopy = _testData;
+		threads.push_back
+		(
+			std::async
+			(
+				[&] 
+				{
+					auto dataCopy = _testData;
 
-	//				auto start = std::chrono::high_resolution_clock::now();
-	//				i.second(dataCopy);
-	//				auto end = std::chrono::high_resolution_clock::now();
+					auto start = std::chrono::high_resolution_clock::now();
+					i.second(dataCopy);
+					auto end = std::chrono::high_resolution_clock::now();
 
-	//				if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
-	//				{
-	//					_badSorts.push_back(i.first);
-	//					return false;
-	//				}
+					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
+					{
+						_badSorts.push_back(i.first);
+						return false;
+					}
 
-	//				_times.at(i.first).sorted = end - start;
-	//				return true;
-	//			}
-	//		)
-	//	);
-	//	//Reverse sorted data----------------------------------------------------------------
-	//	threads.push_back
-	//	(
-	//		std::async
-	//		(
-	//			[&] 
-	//			{
-	//				auto dataCopy = _testData;
+					_times.at(i.first).sorted = end - start;
+					return true;
+				}
+			)
+		);
+		//Reverse sorted data----------------------------------------------------------------
+		threads.push_back
+		(
+			std::async
+			(
+				[&] 
+				{
+					auto dataCopy = _testData;
 
-	//				auto start = std::chrono::high_resolution_clock::now();
-	//				i.second(dataCopy);
-	//				auto end = std::chrono::high_resolution_clock::now();
+					auto start = std::chrono::high_resolution_clock::now();
+					i.second(dataCopy);
+					auto end = std::chrono::high_resolution_clock::now();
 
-	//				if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
-	//				{
-	//					_badSorts.push_back(i.first);
-	//					return false;
-	//				}
+					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
+					{
+						_badSorts.push_back(i.first);
+						return false;
+					}
 
-	//				_times.at(i.first).revSorted = end - start;
-	//				return true;
-	//			}
-	//		)
-	//	);
+					_times.at(i.first).revSorted = end - start;
+					return true;
+				}
+			)
+		);
 	}
 
 	//Return true only if all tests passed

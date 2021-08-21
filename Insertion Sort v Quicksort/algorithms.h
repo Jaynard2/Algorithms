@@ -1,18 +1,17 @@
-#ifndef ALGORITHMS_TO_BE_TESTED
-#define ALGORITHMS_TO_BE_TESTED
+#pragma once
 
 #include <list>
 #include <algorithm>
 #include <vector>
 
-class TestingAlgorithms{
+class TestingAlgorithms {
 public:
 	static void quickSort(std::list<int> collection) {
 		int pivotIndex = rand() % (collection.size() - 1);
 		auto pivot = collection.begin();
 		std::advance(pivot, pivotIndex);
 		std::list<int> lower = qSort(&collection, pivot);
-		if(collection.size() > 1) {
+		if (collection.size() > 1) {
 			quickSort(collection);
 		}
 		if (lower.size() > 1) {
@@ -66,4 +65,3 @@ public:
 		}
 	};
 };
-#endif
