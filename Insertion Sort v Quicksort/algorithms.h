@@ -2,64 +2,91 @@
 
 #include <list>
 #include <algorithm>
-#include <vector>
+#include <iterator>
+#include <functional>
 
 class TestingAlgorithms {
 public:
 	static void quickSort(std::list<int> collection) {
-		int pivotIndex = rand() % (collection.size() - 1);
-		auto pivot = collection.begin();
-		std::advance(pivot, pivotIndex);
-		std::list<int> lower = qSort(&collection, pivot);
-		if (collection.size() > 1) {
-			quickSort(collection);
-		}
-		if (lower.size() > 1) {
-			quickSort(lower);
-		}
-		collection.merge(lower);
+		sorter_quick(collection, collection.begin(), --collection.end(), getPivot);
 	};
 
-	static std::list<int> qSort(std::list<int>* collection, std::list<int>::iterator pivot) {
-		std::list<int> lower = std::list<int>();
-		std::vector<std::list<int>::iterator> tobeRemoved = std::vector<std::list<int>::iterator>();
-		for (auto i = collection->begin(); i != collection->end(); i++) {
-			if (*i < *pivot) {
-				lower.push_back(*i);
-				tobeRemoved.push_back(i);
+	static void sorter_quick(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator, std::list<int>::iterator)> pivotPoint) {
+		std::list<int>::iterator pivot = pivotPoint(begin, end);
+		int copyCounter = 0;
+		for (auto i = begin; i != pivot; i) {
+			if (*i > *pivot) {
+				collection.insert(std::next(pivot), *i);
+				if (begin == i) {
+					begin++;
+				}
+				i++;
+				copyCounter++;
+				collection.erase(std::prev(i));
+			}
+			else {
+				i++;
 			}
 		}
-		if (lower.size() == 0) {
-			lower.push_back(*pivot);
-			tobeRemoved.push_back(pivot);
+		auto stop = std::next(pivot, copyCounter);
+		for (auto i = end; i != stop; i) {
+			if (*i < *pivot) {
+				collection.insert(pivot, *i);
+				if (end == i) {
+					end--;
+				}
+				else if (begin == pivot) {
+					begin--;
+				}
+				i--;
+				collection.erase(std::next(i));
+			}
+			else {
+				i--;
+			}
 		}
-		for (int i = 0; i < tobeRemoved.size(); i++) {
-			collection->erase(tobeRemoved[i]);
+		if(begin != pivot && std::next(begin) != pivot){
+			sorter_quick(collection, begin, pivot, pivotPoint);
 		}
-		return lower;
-	};
+		if (end != pivot++ && end != pivot) {
+			sorter_quick(collection, pivot, end, pivotPoint);
+		}
+	}
 
-	static void quickSort_modified(std::list<int> collection) {
+	static std::list<int>::iterator getPivot(std::list<int>::iterator begin, std::list<int>::iterator end) {
+		int pivotIndex = rand() % (std::distance(begin, end));
+		auto pivot = begin;
+		std::advance(pivot, pivotIndex);
+		return pivot;
+	}
+
+	static std::list<int>::iterator getPivot_modified(std::list<int>::iterator begin, std::list<int>::iterator end) {
 		const int count = 3;
 		int pivotIndecies[count];
 		for (int i = 0; i < count; i++) {
-			pivotIndecies[i] = rand() % (collection.size() - 1);
+			pivotIndecies[i] = rand() % (std::distance(begin, end));
 		}
-		//std::sort(pivotIndecies, pivotIndecies + count);
-		auto pivot = collection.begin();
-		std::advance(pivot, pivotIndecies[count / 2]);
-		auto lower = qSort(&collection, pivot);
-		quickSort_modified(collection);
-		quickSort_modified(lower);
+		std::sort(pivotIndecies, pivotIndecies + count);
+		auto pivot = begin;
+		std::advance(pivot, pivotIndecies[count/2]);
+		return pivot;
+	}
+
+	static void quickSort_modified(std::list<int> collection) {
+		sorter_quick(collection, collection.begin(), --collection.end(), getPivot_modified);
 	};
 
 	static void insertSort(std::list<int> collection) {
-		for (auto i = collection.begin(); i != collection.end(); i++) {
+		for (auto i = collection.begin(); i != collection.end(); i) {
 			for (auto j = i; j != collection.begin(); j--) {
 				if (*i < *j) {
 					collection.insert(j, *i);
-					collection.erase(i);
+					i++;
+					collection.erase(std::next(i));
 					break;
+				}
+				else {
+					i++;
 				}
 			}
 		}
