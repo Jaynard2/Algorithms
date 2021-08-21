@@ -1,5 +1,6 @@
 #include <iostream>
 #include "SortTester.h"
+#include "algorithms.h"
 
 int main()
 {
@@ -7,6 +8,7 @@ int main()
 	std::cin >> amount;
 
 	SortTester tester(amount);
+	tester.addFunction("Quick_Sort", TestingAlgorithms::quickSort);
 
 	if (!tester.startTest())
 	{
