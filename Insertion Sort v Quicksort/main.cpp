@@ -16,10 +16,14 @@ struct TestFunctions
 
 int main()
 {
+	std::cout << "Starting Automated Test" << std::endl;
 	std::vector<std::future<bool>> testThreads;
 	std::vector<SortTester> tests;
-	std::array<TestFunctions, 0> funcs =
+	std::array<TestFunctions, 3> funcs =
 	{
+		"Quick Sort", TestingAlgorithms::quickSort,
+		"Quick Sort Modified", TestingAlgorithms::quickSort_modified,
+		"Insert Sort", TestingAlgorithms::insertSort
 	};
 
 	for (unsigned i = 1; i < 10000; i += 1000)
