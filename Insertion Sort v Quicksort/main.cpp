@@ -8,7 +8,7 @@ int main()
 	std::cin >> amount;
 
 	SortTester tester(amount);
-	tester.addFunction("Quick_Sort", TestingAlgorithms::quickSort);
+	tester.addFunction("Quick_Sort", TestingAlgorithms::quickSort_modified);
 
 	if (!tester.startTest())
 	{
