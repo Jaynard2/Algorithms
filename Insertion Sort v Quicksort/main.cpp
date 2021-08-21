@@ -18,32 +18,35 @@ int main()
 {
 	std::vector<std::future<bool>> testThreads;
 	std::vector<SortTester> tests;
-	std::array<TestFunctions, 0> funcs =
+	std::array<TestFunctions, 3> funcs =
 	{
+		"Quick Sort", TestingAlgorithms::quickSort,
+		"Quick Sort Modified", TestingAlgorithms::quickSort_modified,
+		"Insert Sort", TestingAlgorithms::insertSort
 	};
 
-	for (unsigned i = 1; i < 10000; i += 1000)
+	for (unsigned i = 1; i < 10000; i += 100)
 	{
-		tests.push_back(SortTester(i));
+		tests.emplace_back(i);
 
 		for (const auto& i : funcs)
 		{
 			tests.back().addFunction(i.name, i.func);
 		}
 
-		testThreads.push_back(std::async([&] { return tests.back().startTest(); }));
+		testThreads.emplace_back(std::async([&] { return tests.back().startTest(); }));
 	}
 
-	for (unsigned i = 15000; i < 1000000; i += 50000)
+	for (unsigned i = 15000; i < 1000000; i += 100000)
 	{
-		tests.push_back(SortTester(i));
+		tests.emplace_back(i);
 
 		for (const auto& i : funcs)
 		{
 			tests.back().addFunction(i.name, i.func);
 		}
 
-		testThreads.push_back(std::async([&] { return tests.back().startTest(); }));
+		testThreads.emplace_back(std::async([&] { return tests.back().startTest(); }));
 	}
 
 	bool success = true;
