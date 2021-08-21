@@ -16,6 +16,7 @@ struct TestFunctions
 
 int main()
 {
+	std::cout << "Starting Automated Test" << std::endl;
 	std::vector<std::future<bool>> testThreads;
 	std::vector<SortTester> tests;
 	std::array<TestFunctions, 3> funcs =

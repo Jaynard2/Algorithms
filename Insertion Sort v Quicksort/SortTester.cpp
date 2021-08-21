@@ -49,7 +49,7 @@ bool SortTester::startTest()
 			(
 				[&] 
 				{
-					auto dataCopy = _testData;
+					std::list<int> dataCopy = _testData;
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -74,7 +74,7 @@ bool SortTester::startTest()
 			(
 				[&] 
 				{
-					auto dataCopy = _testData;
+					std::list<int> dataCopy = _testData;
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -98,7 +98,7 @@ bool SortTester::startTest()
 			(
 				[&] 
 				{
-					auto dataCopy = _testData;
+					std::list<int> dataCopy = _testData;
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
