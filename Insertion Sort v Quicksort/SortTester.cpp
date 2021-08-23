@@ -6,7 +6,7 @@
 #include <exception>
 #include <future>
 
-SortTester::SortTester(unsigned long dataSize) : _sortFuncs(), _times()
+SortTester::SortTester(unsigned dataSize) : _sortFuncs(), _times()
 {
 	//Make vectors large enough to hold all data
 	_testData.resize(dataSize);
@@ -26,7 +26,6 @@ SortTester::SortTester(unsigned long dataSize) : _sortFuncs(), _times()
 
 void SortTester::addFunction(std::string name, std::function<void(std::list<int>&)> func)
 {
-	_testAmount++;
 	if (_sortFuncs.find(name) == _sortFuncs.end())
 	{
 		_sortFuncs.emplace(std::make_pair(name, func));
@@ -126,6 +125,11 @@ bool SortTester::startTest()
 			success = false;
 		}
 	}
+
+	//clear memory
+	_testData.clear();
+	_sortedData.clear();
+	_reverseSortedData.clear();
 
 	return success;
 }

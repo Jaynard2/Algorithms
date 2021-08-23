@@ -18,7 +18,7 @@ struct TimeCompleted
 class SortTester
 {
 public:
-	SortTester(unsigned long dataSize);
+	SortTester(unsigned dataSize);
 	
 	void addFunction(std::string name, std::function<void(std::list<int>&)> func);
 
@@ -28,8 +28,6 @@ public:
 	const std::vector<std::string>& getBadSorts() const { return _badSorts; }
 
 private:
-	unsigned _testAmount = 0;
-
 	std::map<std::string, std::function<void(std::list<int>&)>> _sortFuncs;
 	std::list<int> _testData;
 	std::list<int> _sortedData;
