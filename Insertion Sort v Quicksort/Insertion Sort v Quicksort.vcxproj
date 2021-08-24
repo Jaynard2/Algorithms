@@ -147,10 +147,12 @@
     <ClCompile Include="CSVWriter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SortTester.cpp" />
+    <ClCompile Include="ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSVWriter.h" />
     <ClInclude Include="SortTester.h" />
+    <ClInclude Include="ThreadManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

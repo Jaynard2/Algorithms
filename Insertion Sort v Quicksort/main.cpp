@@ -1,91 +1,74 @@
 #include <iostream>
-#include <future>
-#include <vector>
-#include <array>
-#include <string>
-#include <functional>
-#include <mutex>
+#include <time.h>
 
-#include "algorithms.h"
+//#include "algorithms.h"
 #include "SortTester.h"
+#include "ThreadManager.h"
 
-struct TestFunctions
-{
-	std::string name;
-	std::function<void(std::list<int>&)> func;
-};
+std::mutex io;
+
+bool test();
 
 int main()
 {
 	std::cout << "Starting Automated Test" << std::endl;
+	auto& threads = ThreadManager::getManager();
 
-	std::vector<std::future<bool>> testThreads;
-	std::vector<SortTester> tests;
+	unsigned id1 = threads.requestThread<bool>(test);
+	unsigned id2 = threads.requestThread<bool>(test);
 
-	std::array<TestFunctions, 3> funcs =
+	//Busy wait example (WARNING: IO DOES NOT HAVE PROPER LOCKING)
+	/*bool thread1Done = false;
+	bool thread2Done = false;
+	std::any data1;
+	std::any data2;
+	while (!(thread1Done && thread2Done))
 	{
-		"Quick Sort", TestingAlgorithms::quickSort,
-		"Quick Sort Modified", TestingAlgorithms::quickSort_modified,
-		"Insert Sort", TestingAlgorithms::insertSort
-	};
+		if(!thread1Done)
+			data1 = threads.check(id1);
+		if(!thread2Done)
+			data2 = threads.check(id2);
 
-	testThreads.reserve(1010);
-	tests.reserve(1010);
-
-	std::mutex mut;
-	for (unsigned i = 1; i < 10000; i += 100)
-	{
-		std::lock_guard<std::mutex> lock(mut);
-
-		tests.emplace_back(i);
-
-		for (const auto& j : funcs)
+		if (data1.has_value())
 		{
-			tests.back().addFunction(j.name, j.func);
+			std::cout << "Thread 1: " << std::any_cast<bool>(data1) << std::endl;
+			thread1Done = true;
 		}
+		else if(!thread1Done)
+			std::cout << "Thread 1 working...\n";
 
-		testThreads.emplace_back(std::async([&] { return tests.back().startTest(); }));
-	}
-
-	for (unsigned i = 15000; i < 1000000; i += 100000)
-	{
-		std::lock_guard<std::mutex> lock(mut);
-
-		tests.emplace_back(i);
-
-		for (const auto& j : funcs)
+		if (data2.has_value())
 		{
-			tests.back().addFunction(j.name, j.func);
+			std::cout << "Thread 2: " << std::any_cast<bool>(data2) << std::endl;
+			thread2Done = true;
 		}
+		else if(!thread2Done)
+			std::cout << "Thread 2 working...\n";
+	}*/
 
-		testThreads.emplace_back(std::async([&] { return tests.back().startTest(); }));
-	}
+	//Blocking example
 
-	bool success = true;
-	for (auto& i : testThreads)
-	{
-		if (!i.get())
-		{
-			success = false;
-		}
-	}
-
-	if (!success)
-	{
-		for (const auto& i : tests)
-		{
-			auto& badSorts = i.getBadSorts();
-			if (badSorts.size() > 0)
-			{
-				for (const auto& j : badSorts)
-				{
-					std::cout << j << " ";
-				}
-
-				std::cout << std::endl;
-			}
-		}
-	}
+	std::unique_lock l(io);
+	std::cout << "Thread 1: ";
+	l.unlock();
+	std::cout << std::any_cast<bool>(threads.get(id1)) << std::endl << std::flush;
+	l.lock();
+	std::cout << "Thread 2: " << std::flush;
+	l.unlock();
+	std::cout << std::any_cast<bool>(threads.get(id2)) << std::endl << std::flush;
 
 	return 0;
+}
+
+bool test()
+{
+	static int counter = 0;
+
+	unsigned count = 1000000000;
+	while (count-- > 0);
+
+	std::lock_guard l(io);
+	std::cout << "This is test " << ++counter << std::endl;
+
+	return true;
 }
