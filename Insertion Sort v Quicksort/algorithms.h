@@ -12,10 +12,10 @@ public:
 	};
 
 	static void sorter_quick(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator, std::list<int>::iterator)> pivotPoint) {
-
-		if (collection.size() <= 1)
+		if (collection.size() <= 1) {
 			return;
-
+		}
+		//gets the pivot point from the function pointer passed to the function
 		std::list<int>::iterator pivot = pivotPoint(begin, end);
 		int copyCounter = 0;
 		for (auto i = begin; i != pivot; i) {
