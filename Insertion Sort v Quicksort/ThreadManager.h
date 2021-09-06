@@ -28,6 +28,7 @@ public:
 
 	std::any check(unsigned id);
 	std::any get(unsigned id);
+	void joinAll();
 
 private:
 	ThreadManager();

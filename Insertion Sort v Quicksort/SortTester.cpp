@@ -5,23 +5,16 @@
 #include <thread>
 #include <exception>
 #include <future>
+#include <list>
 
-SortTester::SortTester(unsigned dataSize) : _sortFuncs(), _times()
+SortTester::SortTester(unsigned int dataSize, unsigned int start, unsigned int step, ThreadManager* threads) : _sortFuncs(), _times()
 {
-	//Make vectors large enough to hold all data
-	_testData.resize(dataSize);
-	_sortedData.resize(dataSize);
-	_reverseSortedData.resize(dataSize);
+	_testLength = dataSize;
+	_testStartIndex = start;
+	_step = step;
+	_threadManager = threads;
 	
 	srand(time(NULL));
-
-	//Generate random values for test data
-	std::generate(_testData.begin(), _testData.end(), rand);
-	
-	//Create sorted data for comparison and sorted runs
-	std::copy(_testData.begin(), _testData.end(), _sortedData.begin());
-	_sortedData.sort();
-	std::reverse_copy(_sortedData.begin(), _sortedData.end(), _reverseSortedData.begin());
 }
 
 void SortTester::addFunction(std::string name, std::function<void(std::list<int>&)> func)
@@ -32,48 +25,58 @@ void SortTester::addFunction(std::string name, std::function<void(std::list<int>
 	}
 }
 
-bool SortTester::startTest()
+void SortTester::startTest()
 {
-	std::vector<std::future<bool>> threads;
+	//Make vectors large enough to hold all data
+	_testData.resize(_testLength);
+	_sortedData.resize(_testLength);
+	_reverseSortedData.resize(_testLength);
 
-	for (auto& i : _sortFuncs)
-	{
-		//pre-construct TimeCompleted to prevent race conditions
-		_times.emplace(i.first, TimeCompleted());
+	//Generate random values for test data
+	std::generate(_testData.begin(), _testData.end(), rand);
 
-		//Unsorted data----------------------------------------------------------------------
-		threads.push_back
-		(
-			std::async
+	//Create sorted data for comparison and sorted runs
+	std::copy(_testData.begin(), _testData.end(), _sortedData.begin());
+	std::sort(_sortedData.begin(), _sortedData.end());
+	std::reverse_copy(_sortedData.begin(), _sortedData.end(), _reverseSortedData.begin());
+
+	for (unsigned int testcount = _testStartIndex; testcount < _testLength; testcount++) {
+
+		for (auto& i : _sortFuncs)
+		{
+			//pre-construct TimeCompleted to prevent race conditions
+			_times.emplace(i.first, TimeCompleted());
+			_times.at(i.first).iteration = testcount;
+
+			//Unsorted data----------------------------------------------------------------------
+			_threadManager->requestThread<void>
 			(
-				[&] 
+				[this, &i, &testcount]
 				{
-					std::list<int> dataCopy = _testData;
+					std::list<int> dataCopy;
+					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
 					auto end = std::chrono::high_resolution_clock::now();
 
 					//Check that vakues are correctly sorted
-					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
+					if (!std::equal(dataCopy.begin(), dataCopy.end(), this->_sortedData.begin()))
 					{
-						_badSorts.push_back(i.first);
-						return false;
+						std::lock_guard lock(this->_badSort_lock);
+						this->_badSorts.push_back(std::pair(i.first, testcount));
 					}
 
 					_times.at(i.first).unsorted = end - start;
-					return true;
 				}
-			)
-		);
-		//Sorted data-------------------------------------------------------------------------
-		threads.push_back
-		(
-			std::async
+			);
+			//Sorted data-------------------------------------------------------------------------
+			_threadManager->requestThread<void>
 			(
-				[&] 
+				[&]
 				{
-					std::list<int> dataCopy = _testData;
+					std::list<int> dataCopy;
+					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -81,23 +84,20 @@ bool SortTester::startTest()
 
 					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
 					{
-						_badSorts.push_back(i.first);
-						return false;
+						std::lock_guard lock(this->_badSort_lock);
+						this->_badSorts.push_back(std::pair(i.first, testcount));
 					}
 
-					_times.at(i.first).sorted = end - start;
-					return true;
+					this->_times.at(i.first).sorted = end - start;
 				}
-			)
-		);
-		//Reverse sorted data----------------------------------------------------------------
-		threads.push_back
-		(
-			std::async
+			);
+			//Reverse sorted data----------------------------------------------------------------
+			_threadManager->requestThread<void>
 			(
-				[&] 
+				[&]
 				{
-					std::list<int> dataCopy = _testData;
+					std::list<int> dataCopy;
+					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -105,31 +105,20 @@ bool SortTester::startTest()
 
 					if (!std::equal(dataCopy.begin(), dataCopy.end(), _sortedData.begin()))
 					{
-						_badSorts.push_back(i.first);
-						return false;
+						std::lock_guard lock(this->_badSort_lock);
+						this->_badSorts.push_back(std::pair(i.first, testcount));
 					}
 
-					_times.at(i.first).revSorted = end - start;
-					return true;
+					this->_times.at(i.first).revSorted = end - start;
 				}
-			)
-		);
-	}
-
-	//Return true only if all tests passed
-	bool success = true;
-	for (auto& i : threads)
-	{
-		if (!i.get())
-		{
-			success = false;
+			);
 		}
 	}
+	
+	_threadManager->joinAll();
 
 	//clear memory
 	_testData.clear();
 	_sortedData.clear();
 	_reverseSortedData.clear();
-
-	return success;
 }

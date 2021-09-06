@@ -1,39 +1,53 @@
 #pragma once
-#include <list>
 #include <chrono>
 #include <functional>
 #include <string>
 #include <map>
 #include <vector>
+#include <tuple>
+#include "ThreadManager.h"
+#include "CSVWriter.h"
 
 unsigned constexpr amountToTest = 6;
 
 struct TimeCompleted
 {
-	std::chrono::duration<double> sorted;
-	std::chrono::duration<double> unsorted;
-	std::chrono::duration<double> revSorted;
+	std::chrono::duration<float> sorted;
+	std::chrono::duration<float> unsorted;
+	std::chrono::duration<float> revSorted;
+	unsigned int iteration;
 };
+
+std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs) {
+	out << rhs.iteration << "," << rhs.sorted.count() << "," << rhs.unsorted.count() << " " << rhs.revSorted.count() << std::endl;
+	return out;
+}
 
 class SortTester
 {
 public:
-	SortTester(unsigned dataSize);
+	SortTester(unsigned int dataSize, unsigned int start, unsigned int step, ThreadManager *threads);
 	
 	void addFunction(std::string name, std::function<void(std::list<int>&)> func);
 
-	bool startTest();
+	void startTest();
+	bool writeToFile();
 
 	const std::map<std::string, TimeCompleted>& getResults() const { return _times; }
-	const std::vector<std::string>& getBadSorts() const { return _badSorts; }
+	const std::vector<std::pair<std::string, std::uint32_t>>& getBadSorts() const { return _badSorts; }
 
 private:
 	std::map<std::string, std::function<void(std::list<int>&)>> _sortFuncs;
-	std::list<int> _testData;
-	std::list<int> _sortedData;
-	std::list<int> _reverseSortedData;
+	std::vector<int> _testData;
+	std::vector<int> _sortedData;
+	std::vector<int> _reverseSortedData;
+	unsigned int _testLength;
+	unsigned int _testStartIndex;
+	unsigned int _step;
+	ThreadManager* _threadManager;
 
 	std::map<std::string, TimeCompleted> _times;
-	std::vector<std::string> _badSorts;
+	std::mutex _badSort_lock;
+	std::vector<std::pair<std::string, std::uint32_t>> _badSorts;
 
 };

@@ -16,8 +16,39 @@ public:
 			return;
 		}
 		//gets the pivot point from the function pointer passed to the function
+		//moves the pivot to the end
 		std::list<int>::iterator pivot = pivotPoint(begin, end);
-		int copyCounter = 0;
+		auto start = begin;
+		while (end != begin) {
+			//move begining
+			while(*begin < *pivot && begin != end) {
+				begin++;
+			}
+			//move end
+			while(*end >= *pivot && begin != end) {
+				end--;
+			}
+			//switch values
+			if (*begin > *end) {
+				auto temp = *begin;
+				*begin = *end;
+				*end = temp;
+			}
+		}
+		//switch the ending value that both end and begin stop on with the pivot value
+		auto temp = *end;
+		*end = *pivot;
+		*pivot = temp;
+		//Recuse if front is larger than two
+		if (start != begin && std::next(start) != pivot) {
+			sorter_quick(collection, start, begin, pivotPoint);
+		}
+		//Recuse if front is larger than two
+		end++;
+		if (end != pivot && std::next(end) != pivot) {
+			sorter_quick(collection, end, pivot, pivotPoint);
+		}
+		/*int copyCounter = 0;
 		for (auto i = begin; i != pivot; i) {
 			if (*i > *pivot) {
 				collection.insert(std::next(pivot), *i);
@@ -48,31 +79,27 @@ public:
 			else {
 				i--;
 			}
-		}
-		if(begin != pivot && std::next(begin) != pivot){
-			sorter_quick(collection, begin, pivot, pivotPoint);
-		}
-		if (end != pivot++ && end != pivot) {
-			sorter_quick(collection, pivot, end, pivotPoint);
-		}
+		}*/	
 	}
 
 	static std::list<int>::iterator getPivot(std::list<int>::iterator begin, std::list<int>::iterator end) {
-		int pivotIndex = rand() % (std::distance(begin, end));
-		auto pivot = begin;
-		std::advance(pivot, pivotIndex);
-		return pivot;
+		return end;
 	}
 
 	static std::list<int>::iterator getPivot_modified(std::list<int>::iterator begin, std::list<int>::iterator end) {
 		const int count = 3;
 		int pivotIndecies[count];
+		const int length = std::distance(begin, end);
 		for (int i = 0; i < count; i++) {
-			pivotIndecies[i] = rand() % (std::distance(begin, end));
+			pivotIndecies[i] = rand() % length;
 		}
 		std::sort(pivotIndecies, pivotIndecies + count);
 		auto pivot = begin;
 		std::advance(pivot, pivotIndecies[count/2]);
+		auto temp = *end;
+		*end = *pivot;
+		*pivot = temp;
+		pivot = end;
 		return pivot;
 	}
 
@@ -93,6 +120,42 @@ public:
 					i++;
 				}
 			}
+		}
+	};
+
+	static void quickSort_alternate(std::list<int> collection) {
+		sorter_quick_alternate(collection, collection.begin(), --collection.end(), getPivot);
+	};
+
+	static void quickSort_modified_alternate(std::list<int> collection) {
+		sorter_quick_alternate(collection, collection.begin(), --collection.end(), getPivot_modified);
+	};
+
+	static void sorter_quick_alternate(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator, std::list<int>::iterator)> pivotPoint) {
+		if (std::distance(begin, end) < 2) {
+			return;
+		}
+		std::list<int>::iterator pivot = pivotPoint(begin, end);
+		std::list<int>::iterator lower = begin;
+		for (end = begin; end != pivot; end++) {
+			if (*end <= *pivot) {
+				auto temp = *lower;
+				*lower = *end;
+				*end = temp;
+				lower++;
+			}
+		}
+		auto temp = *lower;
+		*lower = *end;
+		*end = temp;
+		//Recuse if front is larger than two
+		if (begin != lower && std::next(begin) != lower) {
+			sorter_quick_alternate(collection, begin, lower, pivotPoint);
+		}
+		//Recuse if front is larger than two
+		lower++;
+		if (lower != end && std::next(lower) != end) {
+			sorter_quick_alternate(collection, lower, end, pivotPoint);
 		}
 	};
 };

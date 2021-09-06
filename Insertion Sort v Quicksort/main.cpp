@@ -1,7 +1,6 @@
 #include <iostream>
 #include <time.h>
-
-//#include "algorithms.h"
+#include "algorithms.h"
 #include "SortTester.h"
 #include "ThreadManager.h"
 
@@ -14,8 +13,23 @@ int main()
 	std::cout << "Starting Automated Test" << std::endl;
 	auto& threads = ThreadManager::getManager();
 
-	unsigned id1 = threads.requestThread<bool>(test);
-	unsigned id2 = threads.requestThread<bool>(test);
+	SortTester Sorter(10, 1, 1, &threads);
+	Sorter.addFunction("quickSort", TestingAlgorithms::quickSort);
+	Sorter.addFunction("quickSort_modified", TestingAlgorithms::quickSort_modified);
+	Sorter.addFunction("insertSort", TestingAlgorithms::insertSort);
+	Sorter.addFunction("quickSort_alternate", TestingAlgorithms::quickSort_alternate);
+	Sorter.addFunction("quickSort_modified_alternate", TestingAlgorithms::quickSort_modified_alternate);
+
+	Sorter.startTest();
+
+	auto result = Sorter.getResults();
+	for (const auto& i : result) {
+		std::cout << i.first << " " << i.second << std::endl;
+	}
+
+
+	//unsigned id1 = threads.requestThread<bool>(test);
+	//unsigned id2 = threads.requestThread<bool>(test);
 
 	//Busy wait example (WARNING: IO DOES NOT HAVE PROPER LOCKING)
 	/*bool thread1Done = false;
@@ -44,7 +58,7 @@ int main()
 		}
 		else if(!thread2Done)
 			std::cout << "Thread 2 working...\n";
-	}*/
+	}
 
 	//Blocking example
 
@@ -55,7 +69,7 @@ int main()
 	l.lock();
 	std::cout << "Thread 2: " << std::flush;
 	l.unlock();
-	std::cout << std::any_cast<bool>(threads.get(id2)) << std::endl << std::flush;
+	std::cout << std::any_cast<bool>(threads.get(id2)) << std::endl << std::flush;*/
 
 	return 0;
 }
