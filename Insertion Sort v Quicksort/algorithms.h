@@ -25,7 +25,7 @@ public:
 				begin++;
 			}
 			//move end
-			while(*end >= *pivot && begin != end) {
+			while (*end >= *pivot && begin != end) {
 				end--;
 			}
 			//switch values
@@ -39,13 +39,15 @@ public:
 		auto temp = *end;
 		*end = *pivot;
 		*pivot = temp;
-		//Recuse if front is larger than two
-		if (start != begin && std::next(start) != pivot) {
+		//Recurse if front is larger than one
+		if (std::distance(start, begin) > 1) {
+			--begin;
 			sorter_quick(collection, start, begin, pivotPoint);
 		}
-		//Recuse if front is larger than two
-		end++;
-		if (end != pivot && std::next(end) != pivot) {
+		//Recurse if front is larger than two - pivot is included in this section
+		//if (end != pivot && std::next(end) != pivot) {
+		if (std::distance(end, pivot) > 1) {
+			end++;
 			sorter_quick(collection, end, pivot, pivotPoint);
 		}
 		/*int copyCounter = 0;
@@ -108,19 +110,17 @@ public:
 	};
 
 	static void insertSort(std::list<int> collection) {
-		for (auto i = collection.begin(); i != collection.end(); i) {
-			for (auto j = i; j != collection.begin(); j--) {
-				if (*i < *j) {
-					collection.insert(j, *i);
-					i++;
-					collection.erase(std::next(i));
-					break;
-				}
-				else {
-					i++;
-				}
+		collection.push_front(-11);
+		for (auto i = std::next(collection.begin(), 2); i != collection.end(); i++) {
+			std::list<int>::iterator j;
+			for (j = std::prev(i); *i < *j && j != collection.begin(); j--);
+			j++;
+			if (j != i) {
+				collection.insert(j, *i);
+				collection.erase(std::next(i));
 			}
 		}
+		collection.erase(collection.begin());
 	};
 
 	static void quickSort_alternate(std::list<int> collection) {
@@ -137,7 +137,7 @@ public:
 		}
 		std::list<int>::iterator pivot = pivotPoint(begin, end);
 		std::list<int>::iterator lower = begin;
-		for (end = begin; end != pivot; end++) {
+		for (end = begin; end != std::prev(pivot); end++) {
 			if (*end <= *pivot) {
 				auto temp = *lower;
 				*lower = *end;
@@ -145,17 +145,19 @@ public:
 				lower++;
 			}
 		}
+		lower++;
 		auto temp = *lower;
-		*lower = *end;
-		*end = temp;
-		//Recuse if front is larger than two
-		if (begin != lower && std::next(begin) != lower) {
+		*lower = *pivot;
+		*pivot = temp;
+		//Recurse if front is larger than two
+		lower--;
+		if (begin != lower) {
 			sorter_quick_alternate(collection, begin, lower, pivotPoint);
 		}
-		//Recuse if front is larger than two
+		//Recurse if larger than 1
 		lower++;
-		if (lower != end && std::next(lower) != end) {
-			sorter_quick_alternate(collection, lower, end, pivotPoint);
+		if (lower != pivot) {
+			sorter_quick_alternate(collection, lower, pivot, pivotPoint);
 		}
 	};
 };

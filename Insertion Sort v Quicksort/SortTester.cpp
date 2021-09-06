@@ -37,7 +37,7 @@ void SortTester::startTest()
 	std::sort(_sortedData.begin(), _sortedData.end());
 	std::reverse_copy(_sortedData.begin(), _sortedData.end(), _reverseSortedData.begin());
 
-	for (unsigned int testcount = _testStartIndex; testcount < _testLength; testcount++) {
+	for (unsigned int testcount = _testStartIndex; testcount <= _testLength; testcount++) {
 
 		for (auto& i : _sortFuncs)
 		{
@@ -51,7 +51,7 @@ void SortTester::startTest()
 				[this, &i, &testcount]
 				{
 					std::list<int> dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
+					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + (testcount - 1));
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -70,12 +70,12 @@ void SortTester::startTest()
 				}
 			);
 			//Sorted data-------------------------------------------------------------------------
-			_threadManager->requestThread<int>
+			/*_threadManager->requestThread<int>
 			(
 				[&]
 				{
 					std::list<int> dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
+					dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + (testcount - 1));
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -91,14 +91,14 @@ void SortTester::startTest()
 
 					return 0;
 				}
-			);
+			);*/
 			//Reverse sorted data----------------------------------------------------------------
-			_threadManager->requestThread<int>
+			/*_threadManager->requestThread<int>
 			(
 				[&]
 				{
 					std::list<int> dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
+					dataCopy.insert(dataCopy.begin(), this->_reverseSortedData.begin(), this->_reverseSortedData.begin() + (testcount - 1));
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -114,7 +114,7 @@ void SortTester::startTest()
 
 					return 0;
 				}
-			);
+			);*/
 		}
 	}
 	
@@ -133,6 +133,6 @@ bool SortTester::writeToFile()
 
 std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs)
 {
-	out << rhs.iteration << "," << rhs.sorted.count() << "," << rhs.unsorted.count() << " " << rhs.revSorted.count() << std::endl;
+	out << rhs.iteration << "," << rhs.sorted.count() << "," << rhs.unsorted.count() << "," << rhs.revSorted.count();
 	return out;
 }
