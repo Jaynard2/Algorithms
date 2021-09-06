@@ -60,6 +60,7 @@ void ThreadManager::joinAll()
 	if (_worker.joinable())
 	{
 		_worker.join();
+		_dead = false;
 	}
 }
 
