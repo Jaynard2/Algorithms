@@ -2,9 +2,6 @@
 #include <algorithm>
 #include <ctime>
 #include <random>
-#include <thread>
-#include <exception>
-#include <future>
 #include <list>
 
 SortTester::SortTester(unsigned int dataSize, unsigned int start, unsigned int step, ThreadManager* threads) : _sortFuncs(), _times()
