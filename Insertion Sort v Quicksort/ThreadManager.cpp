@@ -55,6 +55,14 @@ std::any ThreadManager::get(unsigned id)
 	return temp;
 }
 
+void ThreadManager::joinAll()
+{
+	if (_worker.joinable())
+	{
+		_worker.join();
+	}
+}
+
 ThreadManager::ThreadManager() : _maxThreads(std::thread::hardware_concurrency() - 2), _lastID(0), _data(),
 _futureThreads(), _dead(false), _threads(), _finishedThreads(), _dataLock(), _finshedLock(), _worker(), _deadLock(), _startCleanup()
 {

@@ -46,7 +46,7 @@ void SortTester::startTest()
 			_times.at(i.first).iteration = testcount;
 
 			//Unsorted data----------------------------------------------------------------------
-			_threadManager->requestThread<void>
+			_threadManager->requestThread<int>
 			(
 				[this, &i, &testcount]
 				{
@@ -65,10 +65,12 @@ void SortTester::startTest()
 					}
 
 					_times.at(i.first).unsorted = end - start;
+
+					return 0;
 				}
 			);
 			//Sorted data-------------------------------------------------------------------------
-			_threadManager->requestThread<void>
+			_threadManager->requestThread<int>
 			(
 				[&]
 				{
@@ -86,10 +88,12 @@ void SortTester::startTest()
 					}
 
 					this->_times.at(i.first).sorted = end - start;
+
+					return 0;
 				}
 			);
 			//Reverse sorted data----------------------------------------------------------------
-			_threadManager->requestThread<void>
+			_threadManager->requestThread<int>
 			(
 				[&]
 				{
@@ -107,6 +111,8 @@ void SortTester::startTest()
 					}
 
 					this->_times.at(i.first).revSorted = end - start;
+
+					return 0;
 				}
 			);
 		}
@@ -118,4 +124,15 @@ void SortTester::startTest()
 	_testData.clear();
 	_sortedData.clear();
 	_reverseSortedData.clear();
+}
+
+bool SortTester::writeToFile()
+{
+	return false;
+}
+
+std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs)
+{
+	out << rhs.iteration << "," << rhs.sorted.count() << "," << rhs.unsorted.count() << " " << rhs.revSorted.count() << std::endl;
+	return out;
 }

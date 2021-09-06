@@ -18,10 +18,7 @@ struct TimeCompleted
 	unsigned int iteration;
 };
 
-std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs) {
-	out << rhs.iteration << "," << rhs.sorted.count() << "," << rhs.unsorted.count() << " " << rhs.revSorted.count() << std::endl;
-	return out;
-}
+std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs);
 
 class SortTester
 {
