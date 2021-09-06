@@ -72,7 +72,7 @@ void SortTester::startTest()
 			//Sorted data-------------------------------------------------------------------------
 			_threadManager->requestThread<int>
 			(
-				[&]
+				[this, &i, &testcount]
 				{
 					std::list<int> dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + (testcount - 1));
@@ -95,7 +95,7 @@ void SortTester::startTest()
 			//Reverse sorted data----------------------------------------------------------------
 			_threadManager->requestThread<int>
 			(
-				[&]
+				[this, &i, &testcount]
 				{
 					std::list<int> dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_reverseSortedData.begin(), this->_reverseSortedData.begin() + (testcount - 1));
