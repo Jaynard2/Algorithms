@@ -70,7 +70,7 @@ void SortTester::startTest()
 				}
 			);
 			//Sorted data-------------------------------------------------------------------------
-			/*_threadManager->requestThread<int>
+			_threadManager->requestThread<int>
 			(
 				[&]
 				{
@@ -91,9 +91,9 @@ void SortTester::startTest()
 
 					return 0;
 				}
-			);*/
+			);
 			//Reverse sorted data----------------------------------------------------------------
-			/*_threadManager->requestThread<int>
+			_threadManager->requestThread<int>
 			(
 				[&]
 				{
@@ -114,7 +114,7 @@ void SortTester::startTest()
 
 					return 0;
 				}
-			);*/
+			);
 		}
 	}
 	

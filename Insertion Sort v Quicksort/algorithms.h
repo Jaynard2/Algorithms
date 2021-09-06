@@ -45,43 +45,10 @@ public:
 			sorter_quick(collection, start, begin, pivotPoint);
 		}
 		//Recurse if front is larger than two - pivot is included in this section
-		//if (end != pivot && std::next(end) != pivot) {
 		if (std::distance(end, pivot) > 1) {
 			end++;
 			sorter_quick(collection, end, pivot, pivotPoint);
 		}
-		/*int copyCounter = 0;
-		for (auto i = begin; i != pivot; i) {
-			if (*i > *pivot) {
-				collection.insert(std::next(pivot), *i);
-				if (begin == i) {
-					begin++;
-				}
-				i++;
-				copyCounter++;
-				collection.erase(std::prev(i));
-			}
-			else {
-				i++;
-			}
-		}
-		auto stop = std::next(pivot, copyCounter);
-		for (auto i = end; i != stop; i) {
-			if (*i < *pivot) {
-				collection.insert(pivot, *i);
-				if (end == i) {
-					end--;
-				}
-				else if (begin == pivot) {
-					begin--;
-				}
-				i--;
-				collection.erase(std::next(i));
-			}
-			else {
-				i--;
-			}
-		}*/	
 	}
 
 	static std::list<int>::iterator getPivot(std::list<int>::iterator begin, std::list<int>::iterator end) {
