@@ -41,14 +41,19 @@ void SortTester::startTest()
 
 		for (auto& i : _sortFuncs)
 		{
-			//pre-construct TimeCompleted to prevent race conditions
-			_times.emplace(i.first, TimeCompleted());
-			_times.at(i.first).iteration = testcount;
+			if (testcount == _testStartIndex)
+			{
+				//pre-construct TimeCompleted to prevent race conditions
+				_times.emplace(i.first, std::vector<TimeCompleted>());
+				_times.at(i.first).reserve(_testLength - _testStartIndex);
+			}
+
+			_times.at(i.first).emplace_back(TimeCompleted{ std::chrono::duration<float>(0.0), std::chrono::duration<float>(0.0), std::chrono::duration<float>(0.0), testcount});
 
 			//Unsorted data----------------------------------------------------------------------
 			_threadManager->requestThread<int>
 			(
-				[this, &i, &testcount]
+				[this, i, testcount]
 				{
 					std::list<int> dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + (testcount - 1));
@@ -64,7 +69,7 @@ void SortTester::startTest()
 						this->_badSorts.push_back(std::pair(i.first, testcount));
 					}
 
-					_times.at(i.first).unsorted = end - start;
+					_times.at(i.first).at(testcount - this->_testStartIndex).unsorted = end - start;
 
 					return 0;
 				}
@@ -72,7 +77,7 @@ void SortTester::startTest()
 			//Sorted data-------------------------------------------------------------------------
 			_threadManager->requestThread<int>
 			(
-				[this, &i, &testcount]
+				[this, i, testcount]
 				{
 					std::list<int> dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + (testcount - 1));
@@ -87,7 +92,7 @@ void SortTester::startTest()
 						this->_badSorts.push_back(std::pair(i.first, testcount));
 					}
 
-					this->_times.at(i.first).sorted = end - start;
+					this->_times.at(i.first).at(testcount - this->_testStartIndex).sorted = end - start;
 
 					return 0;
 				}
@@ -95,7 +100,7 @@ void SortTester::startTest()
 			//Reverse sorted data----------------------------------------------------------------
 			_threadManager->requestThread<int>
 			(
-				[this, &i, &testcount]
+				[this, i, testcount]
 				{
 					std::list<int> dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_reverseSortedData.begin(), this->_reverseSortedData.begin() + (testcount - 1));
@@ -110,7 +115,7 @@ void SortTester::startTest()
 						this->_badSorts.push_back(std::pair(i.first, testcount));
 					}
 
-					this->_times.at(i.first).revSorted = end - start;
+					this->_times.at(i.first).at(testcount - this->_testStartIndex).revSorted = end - start;
 
 					return 0;
 				}
