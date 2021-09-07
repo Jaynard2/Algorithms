@@ -27,7 +27,6 @@ void SortTester::startTest()
 	//Make vectors large enough to hold all data
 	_testData.resize(_testLength);
 	_sortedData.resize(_testLength);
-	_reverseSortedData.resize(_testLength);
 
 	//Generate random values for test data
 	std::generate(_testData.begin(), _testData.end(), rand);
@@ -35,7 +34,6 @@ void SortTester::startTest()
 	//Create sorted data for comparison and sorted runs
 	std::copy(_testData.begin(), _testData.end(), _sortedData.begin());
 	std::sort(_sortedData.begin(), _sortedData.end());
-	std::reverse_copy(_sortedData.begin(), _sortedData.end(), _reverseSortedData.begin());
 
 	for (unsigned int testcount = _testStartIndex; testcount <= _testLength; testcount = testcount + _step) {
 		for (auto& i : _sortFuncs)
@@ -62,7 +60,7 @@ void SortTester::startTest()
 					auto end = std::chrono::high_resolution_clock::now();
 
 					//Check that vakues are correctly sorted
-					if (!std::equal(this->_sortedData.begin(), this->_sortedData.begin() + testcount, dataCopy.begin()))
+					if (this->isSorted(dataCopy))
 					{
 						std::lock_guard lock(this->_badSort_lock);
 						this->_badSorts.push_back(std::pair(i.first + " Unsorted", testcount));
@@ -85,7 +83,7 @@ void SortTester::startTest()
 					i.second(dataCopy);
 					auto end = std::chrono::high_resolution_clock::now();
 
-					if (!std::equal(this->_sortedData.begin(), this->_sortedData.begin() + testcount, dataCopy.begin()))
+					if (this->isSorted(dataCopy))
 					{
 						std::lock_guard lock(this->_badSort_lock);
 						this->_badSorts.push_back(std::pair(i.first + " Sorted", testcount));
@@ -102,13 +100,13 @@ void SortTester::startTest()
 				[this, i, testcount]
 				{
 					std::list<int> dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_reverseSortedData.begin(), this->_reverseSortedData.begin() + testcount);
+					dataCopy.insert(dataCopy.begin(), this->_sortedData.rbegin(), this->_sortedData.rbegin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
 					auto end = std::chrono::high_resolution_clock::now();
 
-					if (!std::equal(this->_sortedData.begin(), this->_sortedData.begin() + testcount, dataCopy.begin()))
+					if (this->isSorted(dataCopy))
 					{
 						std::lock_guard lock(this->_badSort_lock);
 						this->_badSorts.push_back(std::pair(i.first + " Reverse Sorted", testcount));
@@ -127,12 +125,29 @@ void SortTester::startTest()
 	//clear memory
 	_testData.clear();
 	_sortedData.clear();
-	_reverseSortedData.clear();
 }
 
 bool SortTester::writeToFile()
 {
 	return false;
+}
+
+bool SortTester::isSorted(const std::list<int>& l)
+{
+	if (l.size() <= 1)
+	{
+		return true;
+	}
+
+	for (auto i = std::next(l.begin()); i != l.end(); i++)
+	{
+		if (*i < *std::prev(i))
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs)

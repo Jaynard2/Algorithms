@@ -34,10 +34,11 @@ public:
 	const std::vector<std::pair<std::string, std::uint32_t>>& getBadSorts() const { return _badSorts; }
 
 private:
+	bool isSorted(const std::list<int>& l);
+
 	std::map<std::string, std::function<void(std::list<int>&)>> _sortFuncs;
 	std::vector<int> _testData;
 	std::vector<int> _sortedData;
-	std::vector<int> _reverseSortedData;
 	unsigned int _testLength;
 	unsigned int _testStartIndex;
 	unsigned int _step;
