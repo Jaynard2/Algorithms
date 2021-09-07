@@ -13,12 +13,12 @@ int main()
 	std::cout << "Starting Automated Test" << std::endl;
 	auto& threads = ThreadManager::getManager();
 
-	SortTester Sorter(5, 5, 1, &threads);
-	Sorter.addFunction("quickSort", TestingAlgorithms::quickSort);
+	SortTester Sorter(9, 9, 1, &threads);
+	//Sorter.addFunction("quickSort", TestingAlgorithms::quickSort);
 	//Sorter.addFunction("quickSort_modified", TestingAlgorithms::quickSort_modified);
 	Sorter.addFunction("insertSort", TestingAlgorithms::insertSort);
-	Sorter.addFunction("quickSort_alternate", TestingAlgorithms::quickSort_alternate);
-	Sorter.addFunction("quickSort_modified_alternate", TestingAlgorithms::quickSort_modified_alternate);
+	//Sorter.addFunction("quickSort_alternate", TestingAlgorithms::quickSort_alternate);
+	//Sorter.addFunction("quickSort_modified_alternate", TestingAlgorithms::quickSort_modified_alternate);
 	Sorter.startTest();
 
 	auto result = Sorter.getResults();

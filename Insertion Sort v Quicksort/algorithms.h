@@ -7,7 +7,7 @@
 
 class TestingAlgorithms {
 public:
-	static void quickSort(std::list<int> collection) {
+	static void quickSort(std::list<int>& collection) {
 		sorter_quick(collection, collection.begin(), --collection.end(), getPivot);
 	};
 
@@ -72,11 +72,11 @@ public:
 		return pivot;
 	}
 
-	static void quickSort_modified(std::list<int> collection) {
+	static void quickSort_modified(std::list<int>& collection) {
 		sorter_quick(collection, collection.begin(), --collection.end(), getPivot_modified);
 	};
 
-	static void insertSort(std::list<int> collection) {
+	static void insertSort(std::list<int>& collection) {
 		collection.push_front(-11);
 		for (auto i = std::next(collection.begin(), 2); i != collection.end(); i++) {
 			std::list<int>::iterator j;
@@ -84,17 +84,19 @@ public:
 			j++;
 			if (j != i) {
 				collection.insert(j, *i);
-				collection.erase(std::next(i));
+				auto temp = std::prev(i);
+				collection.erase(i);
+				i = temp;
 			}
 		}
 		collection.erase(collection.begin());
 	};
 
-	static void quickSort_alternate(std::list<int> collection) {
+	static void quickSort_alternate(std::list<int>& collection) {
 		sorter_quick_alternate(collection, collection.begin(), --collection.end(), getPivot);
 	};
 
-	static void quickSort_modified_alternate(std::list<int> collection) {
+	static void quickSort_modified_alternate(std::list<int>& collection) {
 		sorter_quick_alternate(collection, collection.begin(), --collection.end(), getPivot_modified);
 	};
 
