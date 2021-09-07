@@ -55,7 +55,7 @@ void SortTester::startTest()
 				[this, i, testcount]
 				{
 					std::list<int> dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + (testcount - 1));
+					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -79,7 +79,7 @@ void SortTester::startTest()
 				[this, i, testcount]
 				{
 					std::list<int> dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + (testcount - 1));
+					dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
@@ -102,7 +102,7 @@ void SortTester::startTest()
 				[this, i, testcount]
 				{
 					std::list<int> dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_reverseSortedData.begin(), this->_reverseSortedData.begin() + (testcount - 1));
+					dataCopy.insert(dataCopy.begin(), this->_reverseSortedData.begin(), this->_reverseSortedData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);

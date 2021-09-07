@@ -14,11 +14,11 @@ int main()
 	auto& threads = ThreadManager::getManager();
 
 	SortTester Sorter(10, 5, 1, &threads);
-	Sorter.addFunction("quickSort", TestingAlgorithms::quickSort);
+	//Sorter.addFunction("quickSort", TestingAlgorithms::quickSort);
 	//Sorter.addFunction("quickSort_modified", TestingAlgorithms::quickSort_modified);
-	//Sorter.addFunction("insertSort", TestingAlgorithms::insertSort);
-	Sorter.addFunction("quickSort_alternate", TestingAlgorithms::quickSort_alternate);
-	Sorter.addFunction("quickSort_modified_alternate", TestingAlgorithms::quickSort_modified_alternate);
+	Sorter.addFunction("insertSort", TestingAlgorithms::insertSort);
+	//Sorter.addFunction("quickSort_alternate", TestingAlgorithms::quickSort_alternate);
+	//Sorter.addFunction("quickSort_modified_alternate", TestingAlgorithms::quickSort_modified_alternate);
 	Sorter.startTest();
 
 	const auto& result = Sorter.getResults();
