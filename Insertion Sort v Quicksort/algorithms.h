@@ -101,32 +101,34 @@ public:
 	};
 
 	static void sorter_quick_alternate(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator, std::list<int>::iterator)> pivotPoint) {
-		if (std::distance(begin, end) < 2) {
+		if (std::distance(begin, end) < 1) {
 			return;
 		}
 		std::list<int>::iterator pivot = pivotPoint(begin, end);
-		std::list<int>::iterator lower = begin;
-		for (end = begin; end != std::prev(pivot); end++) {
+		collection.insert(begin, -11);
+		std::list<int>::iterator lower = std::prev(begin);
+		for (end = begin; end != pivot; end++) {
 			if (*end <= *pivot) {
+				lower++;
 				auto temp = *lower;
 				*lower = *end;
 				*end = temp;
-				lower++;
 			}
 		}
 		lower++;
 		auto temp = *lower;
 		*lower = *pivot;
 		*pivot = temp;
+		collection.erase(std::prev(begin));
 		//Recurse if front is larger than two
-		lower--;
-		if (begin != lower) {
-			sorter_quick_alternate(collection, begin, lower, pivotPoint);
+		if (std::distance(begin, lower) > 1) {
+			sorter_quick_alternate(collection, begin, std::prev(lower), pivotPoint);
+			
 		}
 		//Recurse if larger than 1
-		lower++;
+		
 		if (lower != pivot) {
-			sorter_quick_alternate(collection, lower, pivot, pivotPoint);
+			sorter_quick_alternate(collection, std::next(lower), pivot, pivotPoint);
 		}
 	};
 };

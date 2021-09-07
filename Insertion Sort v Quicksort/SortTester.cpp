@@ -60,7 +60,7 @@ void SortTester::startTest()
 					auto end = std::chrono::high_resolution_clock::now();
 
 					//Check that vakues are correctly sorted
-					if (this->isSorted(dataCopy))
+					if (!this->isSorted(dataCopy))
 					{
 						std::lock_guard lock(this->_badSort_lock);
 						this->_badSorts.push_back(std::pair(i.first + " Unsorted", testcount));
@@ -83,7 +83,7 @@ void SortTester::startTest()
 					i.second(dataCopy);
 					auto end = std::chrono::high_resolution_clock::now();
 
-					if (this->isSorted(dataCopy))
+					if (!this->isSorted(dataCopy))
 					{
 						std::lock_guard lock(this->_badSort_lock);
 						this->_badSorts.push_back(std::pair(i.first + " Sorted", testcount));
@@ -106,7 +106,7 @@ void SortTester::startTest()
 					i.second(dataCopy);
 					auto end = std::chrono::high_resolution_clock::now();
 
-					if (this->isSorted(dataCopy))
+					if (!this->isSorted(dataCopy))
 					{
 						std::lock_guard lock(this->_badSort_lock);
 						this->_badSorts.push_back(std::pair(i.first + " Reverse Sorted", testcount));
