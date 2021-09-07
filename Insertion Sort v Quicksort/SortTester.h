@@ -30,7 +30,7 @@ public:
 	void startTest();
 	bool writeToFile();
 
-	const std::map<std::string, TimeCompleted>& getResults() const { return _times; }
+	const std::map<std::string, std::vector<TimeCompleted>>& getResults() const { return _times; }
 	const std::vector<std::pair<std::string, std::uint32_t>>& getBadSorts() const { return _badSorts; }
 
 private:
@@ -43,7 +43,7 @@ private:
 	unsigned int _step;
 	ThreadManager* _threadManager;
 
-	std::map<std::string, TimeCompleted> _times;
+	std::map<std::string, std::vector<TimeCompleted>> _times;
 	std::mutex _badSort_lock;
 	std::vector<std::pair<std::string, std::uint32_t>> _badSorts;
 
