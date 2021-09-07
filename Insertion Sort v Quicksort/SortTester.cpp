@@ -37,8 +37,7 @@ void SortTester::startTest()
 	std::sort(_sortedData.begin(), _sortedData.end());
 	std::reverse_copy(_sortedData.begin(), _sortedData.end(), _reverseSortedData.begin());
 
-	for (unsigned int testcount = _testStartIndex; testcount <= _testLength; testcount++) {
-
+	for (unsigned int testcount = _testStartIndex; testcount <= _testLength; testcount = testcount + _step) {
 		for (auto& i : _sortFuncs)
 		{
 			if (testcount == _testStartIndex)
@@ -138,6 +137,6 @@ bool SortTester::writeToFile()
 
 std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs)
 {
-	out << rhs.iteration << "," << rhs.sorted.count() << "," << rhs.unsorted.count() << "," << rhs.revSorted.count();
+	out << rhs.iteration << "," <<  rhs.unsorted.count() << "," << rhs.sorted.count()  << "," << rhs.revSorted.count();
 	return out;
 }
