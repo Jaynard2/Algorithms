@@ -23,7 +23,7 @@ public:
 		sorter_quick_alternate(collection, collection.begin(), --collection.end(), getPivot_modified);
 	};
 
-	static void sorter_quick(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator, std::list<int>::iterator)> pivotPoint) {
+	static void sorter_quick(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator&, std::list<int>::iterator&)> pivotPoint) {
 		if (collection.size() <= 1) {
 			return;
 		}
@@ -64,7 +64,7 @@ public:
 	}
 
 	static void insertSort(std::list<int>& collection) {
-		collection.push_front(-11);
+		collection.emplace_front(-11);
 		for (auto i = std::next(collection.begin(), 2); i != collection.end(); i++) {
 			std::list<int>::iterator j;
 			for (j = std::prev(i); *i < *j && j != collection.begin(); j--);
@@ -79,12 +79,12 @@ public:
 		collection.erase(collection.begin());
 	};
 
-	static void sorter_quick_alternate(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator, std::list<int>::iterator)> pivotPoint) {
+	static void sorter_quick_alternate(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator&, std::list<int>::iterator&)> pivotPoint) {
 		if (std::distance(begin, end) < 1) {
 			return;
 		}
 		std::list<int>::iterator pivot = pivotPoint(begin, end);
-		collection.insert(begin, -11);
+		collection.emplace(begin, -11);
 		std::list<int>::iterator lower = std::prev(begin);
 		for (end = begin; end != pivot; end++) {
 			if (*end <= *pivot) {
@@ -109,9 +109,9 @@ public:
 		}
 	};
 
-	static std::list<int>::iterator getPivot(std::list<int>::iterator begin, std::list<int>::iterator end) { return end; }
+	static std::list<int>::iterator getPivot(std::list<int>::iterator begin, std::list<int>::iterator &end) { return end; }
 
-	static std::list<int>::iterator getPivot_modified(std::list<int>::iterator begin, std::list<int>::iterator end) {
+	static std::list<int>::iterator getPivot_modified(std::list<int>::iterator &begin, std::list<int>::iterator &end) {
 		const int count = 3;
 		std::list<int>::iterator pivotIndecies[count];
 		std::list<int>::iterator pivot;
