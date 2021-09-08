@@ -42,7 +42,8 @@ void SortTester::startTest()
 			{
 				//pre-construct TimeCompleted to prevent race conditions
 				_times.emplace(i.first, std::vector<TimeCompleted>());
-				_times.at(i.first).reserve(_testLength - _testStartIndex);
+				//initalize vector for each function to be tested
+				_times.at(i.first).reserve((_testLength - _testStartIndex)/ _step);
 			}
 
 			_times.at(i.first).emplace_back(TimeCompleted{ std::chrono::duration<float>(0.0), std::chrono::duration<float>(0.0), std::chrono::duration<float>(0.0), testcount});

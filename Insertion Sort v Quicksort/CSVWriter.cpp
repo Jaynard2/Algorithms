@@ -9,6 +9,10 @@ CSVWriter::CSVWriter(std::string_view fileName) : _file(fileName.data())
 	}
 }
 
+CSVWriter::~CSVWriter() {
+	_file.close();
+}
+
 void CSVWriter::nextCell()
 {
 	_file << ",";
