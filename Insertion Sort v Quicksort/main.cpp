@@ -15,7 +15,7 @@ int main()
 		std::cin >> dsize;
 		std::cout << "Starting Index: ";
 		std::cin >> dindex;
-		std::cout << "Incorment size: ";
+		std::cout << "Incerment size: ";
 		std::cin >> dstep;
 		auto& threads = ThreadManager::getManager();
 
@@ -32,18 +32,26 @@ int main()
 		for (const auto& i : result) {
 			std::cout << i.first << std::endl;
 
-		for (const auto& j : i.second)
-		{
-			std::cout << "    " << j << std::endl;
+			for (const auto& j : i.second)
+			{
+				std::cout << "    " << j << std::endl;
+			}
 		}
-	}
-	std::cout << std::endl;
-	std::cout << "Errors Encountered: ";
-	auto error = Sorter.getBadSorts();
-	std::cout << error.size() << std::endl;
-	for (const auto& i : error) {
-		std::cout << i.first << " " << i.second << std::endl;
-	}
+		std::cout << std::endl;
+		std::cout << "Errors Encountered: ";
+		auto error = Sorter.getBadSorts();
+		std::cout << error.size() << std::endl;
+		for (const auto& i : error) {
+			std::cout << i.first << " " << i.second << std::endl;
+		}
+
+		std::cout << "Run again? ";
+		char temp[5];
+		std::cin >> temp;
+		if (temp[0] != 'y') {
+			exit = true;
+		}
+	} while (!exit);
 
 	return 0;
 }
