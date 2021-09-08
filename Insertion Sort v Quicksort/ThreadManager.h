@@ -26,6 +26,8 @@ public:
 	template <typename T>
 	int requestThread(std::function <T()> func);
 
+	void setMaxThreads(int newMax);
+
 	std::any check(unsigned id);
 	std::any get(unsigned id);
 	void joinAll();
@@ -36,7 +38,7 @@ private:
 
 	static ThreadManager s_man;
 
-	const int _maxThreads;
+	int _maxThreads;
 	unsigned _lastID;
 	std::map<int, std::thread> _threads;
 	std::map<unsigned, std::any> _data;

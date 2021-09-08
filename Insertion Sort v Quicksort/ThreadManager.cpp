@@ -10,6 +10,16 @@ ThreadManager::~ThreadManager()
 	}
 }
 
+void ThreadManager::setMaxThreads(int newMax)
+{
+	if (newMax > std::thread::hardware_concurrency())
+	{
+		throw std::exception("Thread count cannot exceed " + std::thread::hardware_concurrency());
+	}
+
+	_maxThreads = newMax;
+}
+
 std::any ThreadManager::check(unsigned id)
 {
 	std::lock_guard guard(_dataLock);
