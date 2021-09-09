@@ -69,19 +69,34 @@ public:
 
 	template <typename T>
 	static void insertSort(T& collection) {
-		collection.emplace_front(-11);
-		for (auto i = std::next(collection.begin(), 2); i != collection.end(); i++) {
-			typename T::iterator j;
-			for (j = std::prev(i); *i < *j && j != collection.begin(); j--);
-			j++;
-			if (j != i) {
-				collection.insert(j, *i);
-				auto temp = std::prev(i);
-				collection.erase(i);
-				i = temp;
+		if (collection.size() < 2) {
+			return;
+		}
+		if constexpr (std::is_same_v <std::vector<int>, T>) {
+			for (int i = 1; i < collection.size(); i++) {
+				int key = collection.at(i);
+				int j;
+				for (j = i - 1; j >= 0 && collection.at(j) > key; j--) {
+					collection.at(j + 1) = collection.at(j);
+				}
+				collection.at(j + 1) = key;
 			}
 		}
-		collection.erase(collection.begin());
+		else {
+			collection.emplace_front(-11);
+			for (auto i = std::next(collection.begin(), 2); i != collection.end(); i++) {
+				typename T::iterator j;
+				for (j = std::prev(i); *i < *j && j != collection.begin(); j--);
+				j++;
+				if (j != i) {
+					collection.insert(j, *i);
+					auto temp = std::prev(i);
+					collection.erase(i);
+					i = temp;
+				}
+			}
+			collection.erase(collection.begin());
+		}
 	};
 
 	template <typename T>
@@ -92,7 +107,7 @@ public:
 			return;
 		}
 		typename T::reverse_iterator pivot = pivotPoint(begin, end);
-		//collection.emplace(begin, -11);
+		
 		typename T::reverse_iterator lower =  std::next(begin);
 		for (end = begin; end != pivot; end--) {
 			if (*end <= *pivot) {
@@ -106,7 +121,6 @@ public:
 		auto temp = *lower;
 		*lower = *pivot;
 		*pivot = temp;
-		//collection.erase(std::prev(begin));
 		//Recurse if front is larger than two
 		dist = std::distance(lower, begin);
 		if (dist > 1) {
