@@ -51,7 +51,7 @@ void SortTester<T>::startTest()
 				_times.at(i.first).reserve((_testLength - _testStartIndex)/ _step);
 			}
 
-			_times.at(i.first).emplace_back(TimeCompleted{ std::chrono::duration<float>(0.0), std::chrono::duration<float>(0.0), std::chrono::duration<float>(0.0), testcount});
+			_times.at(i.first).emplace_back(TimeCompleted());
 
 			//Unsorted data----------------------------------------------------------------------
 			_threadManager->requestThread<int>
