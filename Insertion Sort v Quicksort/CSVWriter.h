@@ -12,10 +12,8 @@ public:
 	void nextcolumn();
 	void writeCurrentCell(std::string_view data);
 
-	std::fstream operator<<(std::string input) {
-		std::fstream output;
-		output << input;
-		return output;
+	void operator<<(std::string input) {
+		_file << input << ",";
 	};
 
 private:

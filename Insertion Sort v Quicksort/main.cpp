@@ -22,20 +22,20 @@ int main()
 
 		SortTester<std::list<int>> sorterList(dsize, dindex, dstep, &threads);
 		std::cout << "Starting Automated Test" << std::endl;
-		sorterList.addFunction("Linked List - quickSort", TestingAlgorithms::quickSort<std::list<int>>);
-		sorterList.addFunction("Linked List - quickSort with median", TestingAlgorithms::quickSort_modified<std::list<int>>);
-		sorterList.addFunction("Linked List - insertSort", TestingAlgorithms::insertSort<std::list<int>>);
+		//sorterList.addFunction("Linked List - quickSort", TestingAlgorithms::quickSort<std::list<int>>);
+		//sorterList.addFunction("Linked List - quickSort with median", TestingAlgorithms::quickSort_modified<std::list<int>>);
+		//sorterList.addFunction("Linked List - insertSort", TestingAlgorithms::insertSort<std::list<int>>);
 		sorterList.addFunction("Linked List - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::list<int>>);
 		sorterList.addFunction("Linked List - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::list<int>>);
 		sorterList.startTest();
 
 		SortTester<std::vector<int>> sorterArr(dsize, dindex, dstep, &threads);
-		std::cout << "Starting Automated Test" << std::endl;
+		/*std::cout << "Starting Automated Test" << std::endl;
 		sorterArr.addFunction("Vector - quickSort", TestingAlgorithms::quickSort<std::vector<int>>);
 		sorterArr.addFunction("Vector - quickSort with median", TestingAlgorithms::quickSort_modified<std::vector<int>>);
-		//sorterArr.addFunction("Vector - insertSort", TestingAlgorithms::insertSort<std::vector<int>>);
-		//sorterArr.addFunction("Vector - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::vector<int>>);
-		//sorterArr.addFunction("Vector - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::vector<int>>);
+		sorterArr.addFunction("Vector - insertSort", TestingAlgorithms::insertSort<std::vector<int>>);*/
+		sorterArr.addFunction("Vector - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::vector<int>>);
+		sorterArr.addFunction("Vector - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::vector<int>>);
 		sorterArr.startTest();
 
 		const auto& resultList = sorterList.getResults();
