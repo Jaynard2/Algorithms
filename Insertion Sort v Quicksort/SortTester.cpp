@@ -52,6 +52,7 @@ void SortTester<T>::startTest()
 			}
 
 			_times.at(i.first).emplace_back(TimeCompleted());
+			_times.at(i.first).back().iteration = testcount;
 
 			//Unsorted data----------------------------------------------------------------------
 			_threadManager->requestThread<int>
