@@ -58,9 +58,9 @@ void SortTester<T>::startTest()
 			(
 				[this, i, testcount]
 				{
-					T dataCopy;
+					T dataCopy = T();
 					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
-
+					
 					auto start = std::chrono::high_resolution_clock::now();
 					i.second(dataCopy);
 					auto end = std::chrono::high_resolution_clock::now();
@@ -72,7 +72,7 @@ void SortTester<T>::startTest()
 						this->_badSorts.push_back(std::pair(i.first + " Unsorted", testcount));
 					}
 
-					_times.at(i.first).at(testcount - this->_testStartIndex).unsorted = end - start;
+					_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).unsorted = end - start;
 
 					return 0;
 				}
@@ -95,7 +95,7 @@ void SortTester<T>::startTest()
 						this->_badSorts.push_back(std::pair(i.first + " Sorted", testcount));
 					}
 
-					this->_times.at(i.first).at(testcount - this->_testStartIndex).sorted = end - start;
+					this->_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).sorted = end - start;
 
 					return 0;
 				}
@@ -118,7 +118,7 @@ void SortTester<T>::startTest()
 						this->_badSorts.push_back(std::pair(i.first + " Reverse Sorted", testcount));
 					}
 
-					this->_times.at(i.first).at(testcount - this->_testStartIndex).revSorted = end - start;
+					this->_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).revSorted = end - start;
 
 					return 0;
 				}
@@ -127,7 +127,7 @@ void SortTester<T>::startTest()
 	}
 	
 	_threadManager->joinAll();
-
+	
 	//clear memory
 	_testData.clear();
 	_sortedData.clear();
