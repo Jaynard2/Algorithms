@@ -151,7 +151,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="algorithms.h" />
-    <ClCompile Include="CSVWriter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SortTester.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -160,7 +159,7 @@
     <ClCompile Include="ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CSVWriter.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SortTester.h" />
     <ClInclude Include="ThreadManager.h" />
   </ItemGroup>

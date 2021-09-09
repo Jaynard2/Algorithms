@@ -24,9 +24,6 @@
     <ClCompile Include="algorithms.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="CSVWriter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ThreadManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,10 +32,10 @@
     <ClInclude Include="SortTester.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CSVWriter.h">
+    <ClInclude Include="ThreadManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadManager.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
