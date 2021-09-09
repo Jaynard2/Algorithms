@@ -19,13 +19,13 @@ int main()
 		std::cin >> dstep;
 		auto& threads = ThreadManager::getManager();
 
-		SortTester Sorter(dsize, dindex, dstep, &threads);
+		SortTester<std::list<int>> Sorter(dsize, dindex, dstep, &threads);
 		std::cout << "Starting Automated Test" << std::endl;
-		Sorter.addFunction("quickSort", TestingAlgorithms::quickSort);
-		Sorter.addFunction("quickSort_modified", TestingAlgorithms::quickSort_modified);
-		Sorter.addFunction("insertSort", TestingAlgorithms::insertSort);
-		Sorter.addFunction("quickSort_alternate", TestingAlgorithms::quickSort_alternate);
-		Sorter.addFunction("quickSort_modified_alternate", TestingAlgorithms::quickSort_modified_alternate);
+		Sorter.addFunction("quickSort", TestingAlgorithms::quickSort<std::list<int>>);
+		Sorter.addFunction("quickSort_modified", TestingAlgorithms::quickSort_modified<std::list<int>>);
+		Sorter.addFunction("insertSort", TestingAlgorithms::insertSort<std::list<int>>);
+		Sorter.addFunction("quickSort_alternate", TestingAlgorithms::quickSort_alternate<std::list<int>>);
+		Sorter.addFunction("quickSort_modified_alternate", TestingAlgorithms::quickSort_modified_alternate<std::list<int>>);
 		Sorter.startTest();
 
 		const auto& result = Sorter.getResults();

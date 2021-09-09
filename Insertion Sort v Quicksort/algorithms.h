@@ -1,35 +1,39 @@
 #pragma once
 
-#include <list>
 #include <algorithm>
 #include <iterator>
 #include <functional>
 
 class TestingAlgorithms {
 public:
-	static void quickSort(std::list<int>& collection) {
-		sorter_quick(collection, collection.begin(), --collection.end(), getPivot);
+	template <typename T>
+	static void quickSort(T& collection) {
+		sorter_quick<T>(collection, collection.begin(), --collection.end(), getPivot<T>);
 	};
 
-	static void quickSort_modified(std::list<int>& collection) {
-		sorter_quick(collection, collection.begin(), --collection.end(), getPivot_modified);
+	template <typename T>
+	static void quickSort_modified(T& collection) {
+		sorter_quick<T>(collection, collection.begin(), --collection.end(), getPivot_modified<T>);
 	};
 
-	static void quickSort_alternate(std::list<int>& collection) {
-		sorter_quick_alternate(collection, collection.begin(), --collection.end(), getPivot);
+	template <typename T>
+	static void quickSort_alternate(T& collection) {
+		sorter_quick_alternate<T>(collection, collection.begin(), --collection.end(), getPivot<T>);
 	};
 
-	static void quickSort_modified_alternate(std::list<int>& collection) {
-		sorter_quick_alternate(collection, collection.begin(), --collection.end(), getPivot_modified);
+	template <typename T>
+	static void quickSort_modified_alternate(T& collection) {
+		sorter_quick_alternate<T>(collection, collection.begin(), --collection.end(), getPivot_modified<T>);
 	};
 
-	static void sorter_quick(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator&, std::list<int>::iterator&)> pivotPoint) {
+	template <typename T>
+	static void sorter_quick(T& collection, typename T::iterator begin, typename T::iterator end, std::function<typename T::iterator(typename T::iterator&, typename T::iterator&)> pivotPoint) {
 		if (collection.size() <= 1) {
 			return;
 		}
 		//gets the pivot point from the function pointer passed to the function
 		//moves the pivot to the end
-		std::list<int>::iterator pivot = pivotPoint(begin, end);
+		typename T::iterator pivot = pivotPoint(begin, end);
 		auto start = begin;
 		while (end != begin) {
 			//move begining
@@ -54,19 +58,20 @@ public:
 		//Recurse if front is larger than one
 		if (std::distance(start, begin) > 1) {
 			--begin;
-			sorter_quick(collection, start, begin, pivotPoint);
+			sorter_quick<T>(collection, start, begin, pivotPoint);
 		}
 		//Recurse if front is larger than two - pivot is included in this section
 		if (std::distance(end, pivot) > 1) {
 			end++;
-			sorter_quick(collection, end, pivot, pivotPoint);
+			sorter_quick<T>(collection, end, pivot, pivotPoint);
 		}
 	}
 
-	static void insertSort(std::list<int>& collection) {
+	template <typename T>
+	static void insertSort(T& collection) {
 		collection.emplace_front(-11);
 		for (auto i = std::next(collection.begin(), 2); i != collection.end(); i++) {
-			std::list<int>::iterator j;
+			typename T::iterator j;
 			for (j = std::prev(i); *i < *j && j != collection.begin(); j--);
 			j++;
 			if (j != i) {
@@ -79,13 +84,15 @@ public:
 		collection.erase(collection.begin());
 	};
 
-	static void sorter_quick_alternate(std::list<int>& collection, std::list<int>::iterator begin, std::list<int>::iterator end, std::function<std::list<int>::iterator(std::list<int>::iterator&, std::list<int>::iterator&)> pivotPoint) {
+	template <typename T>
+	static void sorter_quick_alternate(T& collection, typename T::iterator begin, typename T::iterator end,
+		std::function<typename T::iterator(typename T::iterator&, typename T::iterator&)> pivotPoint) {
 		if (std::distance(begin, end) < 1) {
 			return;
 		}
-		std::list<int>::iterator pivot = pivotPoint(begin, end);
+		typename T::iterator pivot = pivotPoint(begin, end);
 		collection.emplace(begin, -11);
-		std::list<int>::iterator lower = std::prev(begin);
+		typename T::iterator lower = std::prev(begin);
 		for (end = begin; end != pivot; end++) {
 			if (*end <= *pivot) {
 				lower++;
@@ -109,12 +116,14 @@ public:
 		}
 	};
 
-	static std::list<int>::iterator getPivot(std::list<int>::iterator begin, std::list<int>::iterator &end) { return end; }
+	template <typename T>
+	static typename T::iterator getPivot(typename T::iterator begin, typename T::iterator &end) { return end; }
 
-	static std::list<int>::iterator getPivot_modified(std::list<int>::iterator &begin, std::list<int>::iterator &end) {
+	template <typename T>
+	static typename T::iterator getPivot_modified(typename T::iterator &begin, typename T::iterator &end) {
 		const int count = 3;
-		std::list<int>::iterator pivotIndecies[count];
-		std::list<int>::iterator pivot;
+		typename T::iterator pivotIndecies[count];
+		typename T::iterator pivot;
 		const int length = std::distance(begin, end);
 		for (int i = 0; i < count; i++) {
 			int test = rand();

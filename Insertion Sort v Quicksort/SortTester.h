@@ -20,12 +20,13 @@ struct TimeCompleted
 
 std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs);
 
+template <typename T>
 class SortTester
 {
 public:
 	SortTester(unsigned int dataSize, unsigned int start, unsigned int step, ThreadManager *threads);
 	
-	void addFunction(std::string name, std::function<void(std::list<int>&)> func);
+	void addFunction(std::string name, std::function<void(T&)> func);
 
 	void startTest();
 	bool writeToFile();
@@ -34,9 +35,9 @@ public:
 	const std::vector<std::pair<std::string, std::uint32_t>>& getBadSorts() const { return _badSorts; }
 
 private:
-	bool isSorted(const std::list<int>& l);
+	bool isSorted(T& l);
 
-	std::map<std::string, std::function<void(std::list<int>&)>> _sortFuncs;
+	std::map<std::string, std::function<void(T&)>> _sortFuncs;
 	std::vector<int> _testData;
 	std::vector<int> _sortedData;
 	unsigned int _testLength;
@@ -49,3 +50,5 @@ private:
 	std::vector<std::pair<std::string, std::uint32_t>> _badSorts;
 
 };
+
+#include "SortTester.cpp"

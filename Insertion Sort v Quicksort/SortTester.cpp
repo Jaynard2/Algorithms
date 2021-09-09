@@ -1,10 +1,13 @@
-#include "SortTester.h"
+#ifndef SORTTESTER_CPP//Impl for template class
+#define SORTTESTER_CPP
+#include "SortTester.h" //Included for intellsense
 #include <algorithm>
 #include <ctime>
 #include <random>
 #include <list>
 
-SortTester::SortTester(unsigned int dataSize, unsigned int start, unsigned int step, ThreadManager* threads) : _sortFuncs(), _times()
+template <typename T>
+SortTester<T>::SortTester(unsigned int dataSize, unsigned int start, unsigned int step, ThreadManager* threads) : _sortFuncs(), _times()
 {
 	_testLength = dataSize;
 	_testStartIndex = start;
@@ -14,7 +17,8 @@ SortTester::SortTester(unsigned int dataSize, unsigned int start, unsigned int s
 	srand(time(NULL));
 }
 
-void SortTester::addFunction(std::string name, std::function<void(std::list<int>&)> func)
+template <typename T>
+void SortTester<T>::addFunction(std::string name, std::function<void(T&)> func)
 {
 	if (_sortFuncs.find(name) == _sortFuncs.end())
 	{
@@ -22,7 +26,8 @@ void SortTester::addFunction(std::string name, std::function<void(std::list<int>
 	}
 }
 
-void SortTester::startTest()
+template <typename T>
+void SortTester<T>::startTest()
 {
 	//Make vectors large enough to hold all data
 	_testData.resize(_testLength);
@@ -53,7 +58,7 @@ void SortTester::startTest()
 			(
 				[this, i, testcount]
 				{
-					std::list<int> dataCopy;
+					T dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
@@ -77,7 +82,7 @@ void SortTester::startTest()
 			(
 				[this, i, testcount]
 				{
-					std::list<int> dataCopy;
+					T dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
@@ -100,7 +105,7 @@ void SortTester::startTest()
 			(
 				[this, i, testcount]
 				{
-					std::list<int> dataCopy;
+					T dataCopy;
 					dataCopy.insert(dataCopy.begin(), this->_sortedData.rbegin(), this->_sortedData.rbegin() + testcount);
 
 					auto start = std::chrono::high_resolution_clock::now();
@@ -128,12 +133,14 @@ void SortTester::startTest()
 	_sortedData.clear();
 }
 
-bool SortTester::writeToFile()
+template <typename T>
+bool SortTester<T>::writeToFile()
 {
 	return false;
 }
 
-bool SortTester::isSorted(const std::list<int>& l)
+template <typename T>
+bool SortTester<T>::isSorted(T& l)
 {
 	if (l.size() <= 1)
 	{
@@ -156,3 +163,5 @@ std::ostream& operator<<(std::ostream& out, const TimeCompleted& rhs)
 	out << rhs.iteration << "," <<  rhs.unsorted.count() << "," << rhs.sorted.count()  << "," << rhs.revSorted.count();
 	return out;
 }
+
+#endif
