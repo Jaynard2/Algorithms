@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <filesystem>
 #include "algorithms.h"
 #include "SortTester.h"
 #include "ThreadManager.h"
@@ -99,7 +100,9 @@ void writeDataToFile(const std::map<std::string, std::vector<TimeCompleted>>& re
 {
 	for (const auto& i : results)
 	{
-		std::ofstream wr(i.first + ".csv");
+		std::filesystem::create_directories("Results");
+
+		std::ofstream wr("Results/" + i.first + ".csv");
 		wr << "Count,Unsorted,Sorted,Reverse Sorted\n";
 		for (const auto j : i.second)
 		{
