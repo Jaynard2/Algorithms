@@ -18,12 +18,12 @@ public:
 
 	template <typename T>
 	static void quickSort_alternate(T& collection) {
-		sorter_quick_alternate<T>(collection, collection.begin(), --collection.end(), getPivot<T>);
+		sorter_quick_alternate<T>(collection, --collection.rend(), collection.rbegin(), getPivot_r<T>);
 	};
 
 	template <typename T>
 	static void quickSort_modified_alternate(T& collection) {
-		sorter_quick_alternate<T>(collection, collection.begin(), --collection.end(), getPivot_modified<T>);
+		sorter_quick_alternate<T>(collection, --collection.rend(), collection.rbegin(), getPivot_modified_r<T>);
 	};
 
 	template <typename T>
@@ -85,39 +85,44 @@ public:
 	};
 
 	template <typename T>
-	static void sorter_quick_alternate(T& collection, typename T::iterator begin, typename T::iterator end,
-		std::function<typename T::iterator(typename T::iterator&, typename T::iterator&)> pivotPoint) {
-		if (std::distance(begin, end) < 1) {
+	static void sorter_quick_alternate(T& collection, typename T::reverse_iterator begin, typename T::reverse_iterator end,
+		std::function<typename T::reverse_iterator(typename T::reverse_iterator&, typename T::reverse_iterator&)> pivotPoint) {
+		int dist = std::distance(end, begin);
+		if (dist < 1) {
 			return;
 		}
-		typename T::iterator pivot = pivotPoint(begin, end);
-		collection.emplace(begin, -11);
-		typename T::iterator lower = std::prev(begin);
-		for (end = begin; end != pivot; end++) {
+		typename T::reverse_iterator pivot = pivotPoint(begin, end);
+		//collection.emplace(begin, -11);
+		typename T::reverse_iterator lower =  std::next(begin);
+		for (end = begin; end != pivot; end--) {
 			if (*end <= *pivot) {
-				lower++;
+				lower--;
 				auto temp = *lower;
 				*lower = *end;
 				*end = temp;
 			}
 		}
-		lower++;
+		lower--;
 		auto temp = *lower;
 		*lower = *pivot;
 		*pivot = temp;
-		collection.erase(std::prev(begin));
+		//collection.erase(std::prev(begin));
 		//Recurse if front is larger than two
-		if (std::distance(begin, lower) > 1) {
-			sorter_quick_alternate(collection, begin, std::prev(lower), pivotPoint);
+		dist = std::distance(lower, begin);
+		if (dist > 1) {
+			sorter_quick_alternate(collection, begin, std::next(lower), pivotPoint);
 		}
 		//Recurse if larger than 1
 		if (lower != pivot) {
-			sorter_quick_alternate(collection, std::next(lower), pivot, pivotPoint);
+			sorter_quick_alternate(collection, std::prev(lower), pivot, pivotPoint);
 		}
 	};
 
 	template <typename T>
 	static typename T::iterator getPivot(typename T::iterator begin, typename T::iterator &end) { return end; }
+
+	template <typename T>
+	static typename T::reverse_iterator getPivot_r(typename T::reverse_iterator begin, typename T::reverse_iterator& end) { return end; }
 
 	template <typename T>
 	static typename T::iterator getPivot_modified(typename T::iterator &begin, typename T::iterator &end) {
@@ -128,6 +133,44 @@ public:
 		for (int i = 0; i < count; i++) {
 			int test = rand();
 			pivotIndecies[i] = std::next(begin, test % length);
+		}
+		if (*pivotIndecies[1] < *pivotIndecies[0]) {
+			if (*pivotIndecies[2] > *pivotIndecies[0]) {
+				pivot = pivotIndecies[0];
+			}
+			else if (*pivotIndecies[1] < *pivotIndecies[2]) {
+				pivot = pivotIndecies[1];
+			}
+			else {
+				pivot = pivotIndecies[2];
+			}
+		}
+		else {
+			if (*pivotIndecies[2] > *pivotIndecies[1]) {
+				pivot = pivotIndecies[1];
+			}
+			else if (*pivotIndecies[0] < *pivotIndecies[2]) {
+				pivot = pivotIndecies[0];
+			}
+			else {
+				pivot = pivotIndecies[2];
+			}
+		}
+		auto temp = *end;
+		*end = *pivot;
+		*pivot = temp;
+		return end;
+	}
+
+	template <typename T>
+	static typename T::reverse_iterator getPivot_modified_r(typename T::reverse_iterator& begin, typename T::reverse_iterator& end) {
+		const int count = 3;
+		typename T::reverse_iterator pivotIndecies[count];
+		typename T::reverse_iterator pivot;
+		const int length = std::distance(end, begin);
+		for (int i = 0; i < count; i++) {
+			int test = rand();
+			pivotIndecies[i] = std::prev(begin, test % length);
 		}
 		if (*pivotIndecies[1] < *pivotIndecies[0]) {
 			if (*pivotIndecies[2] > *pivotIndecies[0]) {
