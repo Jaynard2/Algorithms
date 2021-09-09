@@ -6,7 +6,6 @@
 #include <vector>
 #include <tuple>
 #include "ThreadManager.h"
-#include "CSVWriter.h"
 
 unsigned constexpr amountToTest = 6;
 
@@ -29,7 +28,6 @@ public:
 	void addFunction(std::string name, std::function<void(T&)> func);
 	
 	void startTest();
-	bool writeToFile();
 
 	const std::map<std::string, std::vector<TimeCompleted>>& getResults() const { return _times; }
 	const std::vector<std::pair<std::string, std::uint32_t>>& getBadSorts() const { return _badSorts; }

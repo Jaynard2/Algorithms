@@ -1,14 +1,21 @@
 #include <iostream>
 #include <time.h>
 #include <vector>
+#include <sstream>
+#include <fstream>
 #include "algorithms.h"
 #include "SortTester.h"
 #include "ThreadManager.h"
 
+void writeDataToFile(const std::map<std::string, std::vector<TimeCompleted>>& results);
+
 int main()
 {
 	bool exit = false;
-	do {
+	do 
+	{
+		auto& threads = ThreadManager::getManager();
+
 		int dsize = 0;
 		int dindex = 0;
 		int dstep = 0;
@@ -18,13 +25,12 @@ int main()
 		std::cin >> dindex;
 		std::cout << "Incerment size: ";
 		std::cin >> dstep;
-		auto& threads = ThreadManager::getManager();
 
 		SortTester<std::list<int>> sorterList(dsize, dindex, dstep, &threads);
 		std::cout << "Starting Automated Test" << std::endl;
-		//sorterList.addFunction("Linked List - quickSort", TestingAlgorithms::quickSort<std::list<int>>);
-		//sorterList.addFunction("Linked List - quickSort with median", TestingAlgorithms::quickSort_modified<std::list<int>>);
-		//sorterList.addFunction("Linked List - insertSort", TestingAlgorithms::insertSort<std::list<int>>);
+		sorterList.addFunction("Linked List - quickSort", TestingAlgorithms::quickSort<std::list<int>>);
+		sorterList.addFunction("Linked List - quickSort with median", TestingAlgorithms::quickSort_modified<std::list<int>>);
+		sorterList.addFunction("Linked List - insertSort", TestingAlgorithms::insertSort<std::list<int>>);
 		sorterList.addFunction("Linked List - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::list<int>>);
 		sorterList.addFunction("Linked List - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::list<int>>);
 		sorterList.startTest();
@@ -47,6 +53,9 @@ int main()
 				std::cout << "    " << j << std::endl;
 			}
 		}
+
+		writeDataToFile(resultList);
+
 		std::cout << std::endl;
 		std::cout << "Errors Encountered: ";
 		auto error = sorterList.getBadSorts();
@@ -64,6 +73,9 @@ int main()
 				std::cout << "    " << j << std::endl;
 			}
 		}
+
+		writeDataToFile(resultArr);
+
 		std::cout << std::endl;
 		std::cout << "Errors Encountered: ";
 		error = sorterArr.getBadSorts();
@@ -81,4 +93,17 @@ int main()
 	} while (!exit);
 
 	return 0;
+}
+
+void writeDataToFile(const std::map<std::string, std::vector<TimeCompleted>>& results)
+{
+	for (const auto& i : results)
+	{
+		std::ofstream wr(i.first + ".csv");
+		wr << "Count,Unsorted,Sorted,Reverse Sorted\n";
+		for (const auto j : i.second)
+		{
+			wr << j << std::endl;
+		}
+	}
 }

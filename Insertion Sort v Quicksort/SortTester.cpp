@@ -134,12 +134,6 @@ void SortTester<T>::startTest()
 }
 
 template <typename T>
-bool SortTester<T>::writeToFile()
-{
-	return false;
-}
-
-template <typename T>
 bool SortTester<T>::isSorted(T& l)
 {
 	if (l.size() <= 1)
