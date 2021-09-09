@@ -33,9 +33,9 @@ int main()
 		std::cout << "Starting Automated Test" << std::endl;
 		sorterArr.addFunction("Vector - quickSort", TestingAlgorithms::quickSort<std::vector<int>>);
 		sorterArr.addFunction("Vector - quickSort with median", TestingAlgorithms::quickSort_modified<std::vector<int>>);
-		sorterArr.addFunction("Vector - insertSort", TestingAlgorithms::insertSort<std::vector<int>>);
-		sorterArr.addFunction("Vector - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::vector<int>>);
-		sorterArr.addFunction("Vector - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::vector<int>>);
+		//sorterArr.addFunction("Vector - insertSort", TestingAlgorithms::insertSort<std::vector<int>>);
+		//sorterArr.addFunction("Vector - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::vector<int>>);
+		//sorterArr.addFunction("Vector - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::vector<int>>);
 		sorterArr.startTest();
 
 		const auto& resultList = sorterList.getResults();

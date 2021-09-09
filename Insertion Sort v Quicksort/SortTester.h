@@ -27,7 +27,7 @@ public:
 	SortTester(unsigned int dataSize, unsigned int start, unsigned int step, ThreadManager *threads);
 	
 	void addFunction(std::string name, std::function<void(T&)> func);
-
+	
 	void startTest();
 	bool writeToFile();
 
