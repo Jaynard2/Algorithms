@@ -1,12 +1,3 @@
-/********************************************************
-* Provides a simple to use interface for creating and using threads. It manages the amount
-* of active threads so that there are no more than the hardware supported amount running at any one time.
-* It also provides methods for checking if a thread has finshed without blocking and a way to join with all
-* threads that have been requested.
-*
-* ©Copyright Cedarville University, its Computer Science faculty, and the
-* authors. All rights reserved.
-* *******************************************************/
 #pragma once
 #include <thread>
 #include <queue>
@@ -32,18 +23,12 @@ public:
 
 	static ThreadManager& getManager() { return s_man; }
 
-	/*
-	* Request a thread gets created. If there is currently the same amount of threads as
-	* the hardware supports concurrently, the thread is not started until another dies
-	*/
 	template <typename T>
 	int requestThread(std::function <T()> func);
 
 	void setMaxThreads(int newMax);
 
-	//Check for return values without blocking
 	std::any check(unsigned id);
-	//Block until thread returns
 	std::any get(unsigned id);
 	void joinAll();
 
@@ -52,12 +37,10 @@ private:
 	void manage();
 
 	static ThreadManager s_man;
-	//Used for accounting the main thread and the worker thread used by the manager
-	constexpr static unsigned USED_THREADS = 2;
 
 	int _maxThreads;
 	unsigned _lastID;
-	std::map<unsigned, std::thread> _threads;
+	std::map<int, std::thread> _threads;
 	std::map<unsigned, std::any> _data;
 	std::queue<unsigned> _finishedThreads;
 

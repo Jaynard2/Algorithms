@@ -1,5 +1,17 @@
 #ifndef SORTTESTER_CPP//Impl for template class
 #define SORTTESTER_CPP
+/*********************************************************
+* Summary: This file includes the implementation for the SortTester class.
+* Since it is a template class, include guards are used (C-style since pragma once behaves oddly
+* in cpp files) and compilation of the file should be disabled.
+*
+* Author: Joshua Grieve
+* Created: Aug 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
+
 #include "SortTester.h" //Included for intellsense
 #include <algorithm>
 #include <ctime>
@@ -40,7 +52,8 @@ void SortTester<T>::startTest()
 	std::copy(_testData.begin(), _testData.end(), _sortedData.begin());
 	std::sort(_sortedData.begin(), _sortedData.end());
 
-	for (unsigned int testcount = _testStartIndex; testcount <= _testLength; testcount = testcount + _step) {
+	for (unsigned int testcount = _testStartIndex; testcount <= _testLength; testcount = testcount + _step)
+	{
 		for (auto& i : _sortFuncs)
 		{
 			if (testcount == _testStartIndex)
@@ -48,7 +61,7 @@ void SortTester<T>::startTest()
 				//pre-construct TimeCompleted to prevent race conditions
 				_times.emplace(i.first, std::vector<TimeCompleted>());
 				//initalize vector for each function to be tested
-				_times.at(i.first).reserve((_testLength - _testStartIndex)/ _step);
+				_times.at(i.first).reserve((_testLength - _testStartIndex) / _step);
 			}
 
 			_times.at(i.first).emplace_back(TimeCompleted());
@@ -56,74 +69,74 @@ void SortTester<T>::startTest()
 
 			//Unsorted data----------------------------------------------------------------------
 			_threadManager->requestThread<int>
-			(
-				[this, i, testcount]
-				{
-					T dataCopy = T();
-					dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
-					
-					auto start = std::chrono::high_resolution_clock::now();
-					i.second(dataCopy);
-					auto end = std::chrono::high_resolution_clock::now();
-
-					//Check that vakues are correctly sorted
-					if (!this->isSorted(dataCopy))
+				(
+					[this, i, testcount]
 					{
-						std::lock_guard lock(this->_badSort_lock);
-						this->_badSorts.push_back(std::pair(i.first + " Unsorted", testcount));
+						T dataCopy = T();
+						dataCopy.insert(dataCopy.begin(), this->_testData.begin(), this->_testData.begin() + testcount);
+
+						auto start = std::chrono::high_resolution_clock::now();
+						i.second(dataCopy);
+						auto end = std::chrono::high_resolution_clock::now();
+
+						//Check that vakues are correctly sorted
+						if (!this->isSorted(dataCopy))
+						{
+							std::lock_guard lock(this->_badSort_lock);
+							this->_badSorts.push_back(std::pair(i.first + " Unsorted", testcount));
+						}
+
+						_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).unsorted = end - start;
+
+						return 0;
 					}
-
-					_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).unsorted = end - start;
-
-					return 0;
-				}
-			);
+					);
 			//Sorted data-------------------------------------------------------------------------
 			_threadManager->requestThread<int>
-			(
-				[this, i, testcount]
-				{
-					T dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + testcount);
-
-					auto start = std::chrono::high_resolution_clock::now();
-					i.second(dataCopy);
-					auto end = std::chrono::high_resolution_clock::now();
-
-					if (!this->isSorted(dataCopy))
+				(
+					[this, i, testcount]
 					{
-						std::lock_guard lock(this->_badSort_lock);
-						this->_badSorts.push_back(std::pair(i.first + " Sorted", testcount));
+						T dataCopy;
+						dataCopy.insert(dataCopy.begin(), this->_sortedData.begin(), this->_sortedData.begin() + testcount);
+
+						auto start = std::chrono::high_resolution_clock::now();
+						i.second(dataCopy);
+						auto end = std::chrono::high_resolution_clock::now();
+
+						if (!this->isSorted(dataCopy))
+						{
+							std::lock_guard lock(this->_badSort_lock);
+							this->_badSorts.push_back(std::pair(i.first + " Sorted", testcount));
+						}
+
+						this->_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).sorted = end - start;
+
+						return 0;
 					}
-
-					this->_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).sorted = end - start;
-
-					return 0;
-				}
-			);
+					);
 			//Reverse sorted data----------------------------------------------------------------
 			_threadManager->requestThread<int>
-			(
-				[this, i, testcount]
-				{
-					T dataCopy;
-					dataCopy.insert(dataCopy.begin(), this->_sortedData.rbegin(), this->_sortedData.rbegin() + testcount);
-
-					auto start = std::chrono::high_resolution_clock::now();
-					i.second(dataCopy);
-					auto end = std::chrono::high_resolution_clock::now();
-
-					if (!this->isSorted(dataCopy))
+				(
+					[this, i, testcount]
 					{
-						std::lock_guard lock(this->_badSort_lock);
-						this->_badSorts.push_back(std::pair(i.first + " Reverse Sorted", testcount));
+						T dataCopy;
+						dataCopy.insert(dataCopy.begin(), this->_sortedData.rbegin(), this->_sortedData.rbegin() + testcount);
+
+						auto start = std::chrono::high_resolution_clock::now();
+						i.second(dataCopy);
+						auto end = std::chrono::high_resolution_clock::now();
+
+						if (!this->isSorted(dataCopy))
+						{
+							std::lock_guard lock(this->_badSort_lock);
+							this->_badSorts.push_back(std::pair(i.first + " Reverse Sorted", testcount));
+						}
+
+						this->_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).revSorted = end - start;
+
+						return 0;
 					}
-
-					this->_times.at(i.first).at((testcount - this->_testStartIndex) / this->_step).revSorted = end - start;
-
-					return 0;
-				}
-			);
+					);
 		}
 	}
 	

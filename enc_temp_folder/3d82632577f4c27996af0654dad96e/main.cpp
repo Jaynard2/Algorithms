@@ -1,13 +1,3 @@
-/*********************************************************
-* Summary: Entry point of the program. Initializes SortTesters for tested algorithms,
-* and outputs the results into a file
-*
-* Author: Joshua Grieve
-* Created: Aug 2021
-*
-* ©Copyright Cedarville University, its Computer Science faculty, and the
-* authors. All rights reserved.
-********************************************************/
 #include <iostream>
 #include <time.h>
 #include <vector>
@@ -23,7 +13,7 @@ void writeDataToFile(const std::map<std::string, std::vector<TimeCompleted>>& re
 int main()
 {
 	bool exit = false;
-	do
+	do 
 	{
 		auto& threads = ThreadManager::getManager();
 
@@ -46,24 +36,23 @@ int main()
 			SortTester<std::list<int>> sorterList(dsize, dindex, dstep, &threads);
 			std::cout << "Starting Automated Test" << std::endl;
 			sorterList.addFunction("Linked List - quickSort", TestingAlgorithms::quickSort<std::list<int>>);
-			sorterList.addFunction("Linked List - quickSort with median", TestingAlgorithms::quickSort_modified<std::list<int>>);
-			sorterList.addFunction("Linked List - insertSort", TestingAlgorithms::insertSort<std::list<int>>);
+			//sorterList.addFunction("Linked List - quickSort with median", TestingAlgorithms::quickSort_modified<std::list<int>>);
+			//sorterList.addFunction("Linked List - insertSort", TestingAlgorithms::insertSort<std::list<int>>);
 			sorterList.addFunction("Linked List - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::list<int>>);
-			sorterList.addFunction("Linked List - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::list<int>>);
+			//sorterList.addFunction("Linked List - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::list<int>>);
 			sorterList.startTest();
 
 			SortTester<std::vector<int>> sorterArr(dsize, dindex, dstep, &threads);
 			std::cout << "Starting Automated Test" << std::endl;
 			sorterArr.addFunction("Vector - quickSort", TestingAlgorithms::quickSort<std::vector<int>>);
-			sorterArr.addFunction("Vector - quickSort with median", TestingAlgorithms::quickSort_modified<std::vector<int>>);
-			sorterArr.addFunction("Vector - insertSort", TestingAlgorithms::insertSort<std::vector<int>>);
+			//sorterArr.addFunction("Vector - quickSort with median", TestingAlgorithms::quickSort_modified<std::vector<int>>);
+			//sorterArr.addFunction("Vector - insertSort", TestingAlgorithms::insertSort<std::vector<int>>);
 			sorterArr.addFunction("Vector - quickSort alternate", TestingAlgorithms::quickSort_alternate<std::vector<int>>);
-			sorterArr.addFunction("Vector - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::vector<int>>);
+			//sorterArr.addFunction("Vector - quickSort alternate with median", TestingAlgorithms::quickSort_modified_alternate<std::vector<int>>);
 			sorterArr.startTest();
 
 			const auto& resultList = sorterList.getResults();
-			for (const auto& i : resultList)
-			{
+			for (const auto& i : resultList) {
 				std::cout << i.first << std::endl;
 
 				for (const auto& j : i.second)
@@ -78,14 +67,12 @@ int main()
 			std::cout << "Errors Encountered: ";
 			auto error = sorterList.getBadSorts();
 			std::cout << error.size() << std::endl;
-			for (const auto& i : error)
-			{
+			for (const auto& i : error) {
 				std::cout << i.first << " " << i.second << std::endl;
 			}
 
 			const auto& resultArr = sorterArr.getResults();
-			for (const auto& i : resultArr)
-			{
+			for (const auto& i : resultArr) {
 				std::cout << i.first << std::endl;
 
 				for (const auto& j : i.second)
@@ -100,8 +87,7 @@ int main()
 			std::cout << "Errors Encountered: ";
 			error = sorterArr.getBadSorts();
 			std::cout << error.size() << std::endl;
-			for (const auto& i : error)
-			{
+			for (const auto& i : error) {
 				std::cout << i.first << " " << i.second << std::endl;
 			}
 		}
@@ -109,8 +95,7 @@ int main()
 		std::cout << "Run again? ";
 		char temp[5];
 		std::cin >> temp;
-		if (temp[0] != 'y')
-		{
+		if (temp[0] != 'y') {
 			exit = true;
 		}
 	} while (!exit);

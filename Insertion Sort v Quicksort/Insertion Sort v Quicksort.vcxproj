@@ -159,7 +159,6 @@
     <ClCompile Include="ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SortTester.h" />
     <ClInclude Include="ThreadManager.h" />
   </ItemGroup>
