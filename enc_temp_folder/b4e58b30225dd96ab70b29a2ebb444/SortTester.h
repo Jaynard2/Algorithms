@@ -1,13 +1,3 @@
-/********************************************************
-* Provides an interface for submitting sorting algorithms to be tested. It automotically
-* creates a vector of random integers for sorting, and also sorts the same array for testing with data 
-* that is already sorted and reverse sorted. It tests each algorithm on a unique thread for increased performance.
-* The results are stored in a data structure that is retrievable through the interface. The class is a template so that
-* any STL data structure can be tested.
-*
-* ©Copyright Cedarville University, its Computer Science faculty, and the
-* authors. All rights reserved.
-* *******************************************************/
 #pragma once
 #include <chrono>
 #include <functional>
