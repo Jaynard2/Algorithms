@@ -12,7 +12,9 @@ struct CoinUnit {
 
 void fillVector(std::vector<int>* vec, std::string type);
 void sizeVector(std::vector<int>* vec, std::string type);
-void bottomup(std::vector<int>* denomiations, std::vector<int>* problems);
+std::vector<CoinUnit> bottomup(std::vector<int>* denomiations, std::vector<int>* problems);
+std::vector<CoinUnit> Recursive(std::vector<int>* denominations, std::vector<int>* problems);
+CoinUnit solveIndex(std::vector<int>* denomiations, int value);
 
 int main() {
     std::vector<int>* denomiations = nullptr;
@@ -37,7 +39,7 @@ int main() {
     delete problems;
 }
 
-void bottomup(std::vector<int>* denomiations, std::vector<int>* problems) {
+std::vector<CoinUnit> bottomup(std::vector<int>* denomiations, std::vector<int>* problems) {
     std::vector<int>::reverse_iterator currentProblem = problems->rbegin();
     int lastcalcuated = 1;
     std::vector<CoinUnit> coinPurse(*problems->rbegin());
@@ -55,7 +57,33 @@ void bottomup(std::vector<int>* denomiations, std::vector<int>* problems) {
             }
             lastcalcuated++;
         }
+        currentProblem++;
     }
+    return coinPurse;
+}
+
+std::vector<CoinUnit> Recursive(std::vector<int>* denominations, std::vector<int>* problems) {
+    std::vector<CoinUnit> coinpurse(problems->size());
+    for(int i = 0; i < problems->size(); i++){
+        coinpurse.at(i) = solveIndex(denominations, problems->at(i));
+    }
+    return coinpurse;
+}
+
+CoinUnit solveIndex(std::vector<int>* denomiations, int value) {
+    if (value == 1) {
+        return CoinUnit{1,1};
+    }
+    CoinUnit best = { 2000000, 2000000 };
+    std::vector<int>::iterator currentdenom = denomiations->begin();
+    while (currentdenom != denomiations->end()) {
+        CoinUnit temp = solveIndex(denomiations, value - *currentdenom);
+        if (best.count > temp.count) {
+            best.count = temp.count + 1;
+            best.lastCoin = *currentdenom;
+        }
+    }
+    return best;
 }
 
 void fillVector(std::vector<int>* vec, std::string type) {
