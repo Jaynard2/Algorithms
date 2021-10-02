@@ -6,7 +6,7 @@
 #include <algorithm>
 
 struct CoinUnit {
-    int cout;
+    int count;
     int lastCoin;
 };
 
@@ -39,12 +39,22 @@ int main() {
 
 void bottomup(std::vector<int>* denomiations, std::vector<int>* problems) {
     std::vector<int>::reverse_iterator currentProblem = problems->rbegin();
+    int lastcalcuated = 1;
     std::vector<CoinUnit> coinPurse(*problems->rbegin());
+    coinPurse.at(1) = {1,1};
     while (currentProblem != problems->rend()) {
-        for (int i = 0; i < *currentProblem; i++) {
-
+        for (int i = lastcalcuated + 1; i < *currentProblem; i++) {
+            coinPurse.at(i) = { i + 1, i + 1 };
+            std::vector<int>::reverse_iterator obj = denomiations->rbegin();
+            while (obj != denomiations->rend()) {
+                int subp = *currentProblem - *obj;
+                if (subp >= 0 && coinPurse.at(i).count > 1 + coinPurse.at(subp).count) {
+                    coinPurse.at(i).count = 1 + coinPurse.at(subp).count;
+                    coinPurse.at(i).lastCoin = *obj;
+                }
+            }
+            lastcalcuated++;
         }
-
     }
 }
 
