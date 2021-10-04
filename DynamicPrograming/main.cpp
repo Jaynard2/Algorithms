@@ -23,12 +23,12 @@ int main() {
 
     sizeVector(denomiations, "DENOMIATION INPUT ");
 
-    //do
-    //{
+    do
+    {
         //populate the Denomiations Vector
         fillVector(denomiations, "Denomination input ");
-    /*    std::sort(denomiations.begin(), denomiations.end());
-    } while (denomiations[0] != 1);*/
+        std::sort(denomiations.begin(), denomiations.end());
+    } while (denomiations[0] != 1);
     
     //Get the number of problems
     sizeVector(problems, "NUMBER OF PROBLEMS ");
@@ -38,11 +38,11 @@ int main() {
 
     std::sort(problems.begin(), problems.end());
 
-    //const auto dynamicPurse = bottomup(denomiations, problems);
-    const auto dynamicPurse = recursive(denomiations, problems);
-    printResults(dynamicPurse, denomiations);
+    const auto dynamicPurse = bottomup(denomiations, problems);
+    const auto recursivePurse = recursive(denomiations, problems);
 
     printResults(dynamicPurse, denomiations);
+    printResults(recursivePurse, denomiations);
 
 }
 
