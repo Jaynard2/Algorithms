@@ -2,7 +2,6 @@
 #include <string>
 #include <exception>
 #include <vector>
-#include <map>
 #include <iterator>
 #include <algorithm>
 #include "CoinUnit.h"
