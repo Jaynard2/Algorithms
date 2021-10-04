@@ -5,6 +5,7 @@
 #include <iterator>
 #include <algorithm>
 #include "CoinUnit.h"
+#include "ResultStruct.h"
 
 void fillVector(std::vector<int>& vec, std::string type);
 void sizeVector(std::vector<int>& vec, std::string type);
@@ -32,8 +33,8 @@ int main() {
 
     std::sort(problems.begin(), problems.end());
 
-    //const auto dynamicPurse = bottomup(denomiations, problems);
-    const auto dynamicPurse = recursive(denomiations, problems);
+    const auto dynamicPurse = bottomup(denomiations, problems);
+    //const auto dynamicPurse = recursive(denomiations, problems);
 
 }
 
@@ -47,22 +48,40 @@ int main() {
 * Appears to get stuck on case 56 when checks for a solution with coin 24
 */
 std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>& problems) {
-    std::vector<int>::reverse_iterator currentProblem = problems.rbegin();
-    int lastcalcuated = 1;
+    std::vector<int>::iterator currentProblem = problems.begin();
     std::vector<CoinUnit> coinPurse(*problems.rbegin());
-    coinPurse.at(1) = {1,1};
-    while (currentProblem != problems.rend()) {
-        for (int i = lastcalcuated + 1; i < *currentProblem; i++) {
-            coinPurse.at(i) = { i + 1, i + 1 };
-            std::vector<int>::reverse_iterator obj = denomiations.rbegin();
-            while (obj != denomiations.rend()) {
-                int subp = *currentProblem - *obj;
-                if (subp >= 0 && coinPurse.at(i).count > 1 + coinPurse.at(subp).count) {
-                    coinPurse.at(i).count = 1 + coinPurse.at(subp).count;
-                    coinPurse.at(i).lastCoin = *obj;
-                }
+    coinPurse.at(0) = { 1,1 };
+    coinPurse.at(1) = { 1,1 };
+
+    for (int i = 2; i < *problems.rbegin(); i++) {
+        coinPurse.at(i) = { i + 1, i + 1 };
+        std::vector<int>::reverse_iterator obj = denomiations.rbegin();
+        while (obj != denomiations.rend()) {
+            int subp = i - *obj;
+            if (subp >= 0 && coinPurse.at(i).count > 1 + coinPurse.at(subp).count) {
+                coinPurse.at(i).count = 1 + coinPurse.at(subp).count;
+                coinPurse.at(i).lastCoin = *obj;
+                break;
             }
-            lastcalcuated++;
+            obj++;
+        }
+    }
+    std::vector<ResultStruct> result(problems.size());
+    for (int i = 0; currentProblem != problems.end(); i++) {
+        ResultStruct subResult;
+        int index = *currentProblem;
+        subResult.problem = index;
+        subResult.count = coinPurse.at(index).count;
+
+        auto obj = denomiations.begin();
+        while (obj != denomiations.end()) {
+            subResult.coins.insert(*obj, 0);
+            obj++;
+        }
+        while (index > 0) {
+            int coin = coinPurse.at(index).lastCoin;
+            subResult.coins.at(coin) = subResult.coins.at(coin) + 1;
+            index -= coin;
         }
         currentProblem++;
     }
@@ -128,10 +147,13 @@ void sizeVector(std::vector<int>& vec, std::string type) {
     vec.resize(temp);
 }
 
-void printResults(const std::vector<CoinUnit>& purse)
-{
-    for (const auto& i : purse)
-    {
-        std::cout << i << ", ";
+void printResults(const std::vector<ResultStruct>& testResults, std::vector<int> denominations) {
+    for (const auto& i : testResults) {
+        std::cout << i.problem << "cents ";
+        auto iter = denominations.begin();
+        while (iter != denominations.end()) {
+            std::cout << *iter << ":" << i.coins.at(*iter);
+        }
+        std::cout << std::endl;
     }
 }

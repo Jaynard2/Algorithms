@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="CoinUnit.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ResultStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoinUnit.h" />
