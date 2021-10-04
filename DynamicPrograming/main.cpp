@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "CoinUnit.h"
 #include "ResultStruct.h"
+#include "MemoizationSolver.h"
 
 void fillVector(std::vector<int>& vec, std::string type);
 void sizeVector(std::vector<int>& vec, std::string type);
@@ -37,13 +38,41 @@ int main() {
 
     std::sort(problems.begin(), problems.end());
 
+    std::cout << "Bottom Up\n";
     const auto dynamicPurse = bottomup(denominations, problems);
-    const auto recursivePurse = recursive(denominations, problems);
-
     printResults(dynamicPurse, denominations);
+    std::cout << std::endl;
+
+    std::cout << "Recursive\n";
+    const auto recursivePurse = recursive(denominations, problems);
     printResults(recursivePurse, denominations);
+    std::cout << std::endl;
+
+    std::cout << "Memoization\n";
+    const auto mPurse = MemoizationSolver()(denominations, problems);
+    printResults(mPurse, denominations);
+    std::cout << std::endl;
 
 }
+/*
+* 
+DENOMINATION INPUT
+5
+Denomination input
+1
+46
+12
+48
+13
+NUMBER OF PROBLEMS
+5
+Problem Input
+13
+98
+253
+40
+132
+*/
 
 std::vector<ResultStruct> bottomup(std::vector<int>& denominations, std::vector<int>& problems) {
     std::vector<int>::iterator currentProblem = problems.begin();
@@ -93,6 +122,11 @@ std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const
 
     for (const auto& i : problems)
     {
+        if (i > 40)
+        {
+            break;
+        }
+
         ResultStruct result;
         result.problem = i;
 
@@ -111,8 +145,8 @@ void solveIndex(const std::vector<int>& denominations, ResultStruct& solution)
         return;
     }
 
-    int best = INT_MAX;
     ResultStruct bestSol;
+    bestSol.count = INT_MAX;
     for (const auto& i : denominations)
     {
         if (i == solution.problem)
@@ -128,7 +162,7 @@ void solveIndex(const std::vector<int>& denominations, ResultStruct& solution)
 
         solveIndex(denominations, temp);
 
-        if (temp.count < best)
+        if (temp.count < bestSol.count)
         {
             bestSol = temp;
             bestSol.problem += i;
@@ -143,8 +177,6 @@ void solveIndex(const std::vector<int>& denominations, ResultStruct& solution)
                 bestSol.coins.insert({ i, 1 });
                 bestSol.count += 1;
             }
-
-            best = bestSol.count;
         }
     }
 
