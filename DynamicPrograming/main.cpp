@@ -28,7 +28,7 @@ int main() {
         //populate the Denomiations Vector
         fillVector(denomiations, "Denomination input ");
     /*    std::sort(denomiations.begin(), denomiations.end());
-    } while (denomiations[0] != 1);
+    } while (denomiations[0] != 1);*/
     
     //Get the number of problems
     sizeVector(problems, "NUMBER OF PROBLEMS ");
