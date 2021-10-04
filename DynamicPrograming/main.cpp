@@ -10,7 +10,7 @@
 
 void fillVector(std::vector<int>& vec, std::string type);
 void sizeVector(std::vector<int>& vec, std::string type);
-void printResults(const std::vector<CoinUnit>& purse);
+void printResults(const std::vector<ResultStruct>& testResults, std::vector<int> denominations);
 
 std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>& problems);
 
