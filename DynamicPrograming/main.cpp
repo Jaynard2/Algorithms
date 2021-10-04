@@ -46,15 +46,6 @@ int main() {
 
 }
 
-/*
-* Found bug where it enters infite loop. Try folloing inputs
-* DENOMINATIONS: 3
-* 2, 7, 24
-* NUMBER OF PROBLEMS: 5
-* 2, 5, 24, 56, 4
-* 
-* Appears to get stuck on case 56 when checks for a solution with coin 24
-*/
 std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<int>& problems) {
     std::vector<int>::iterator currentProblem = problems.begin();
     std::vector<CoinUnit> coinPurse(*problems.rbegin() + 1);
