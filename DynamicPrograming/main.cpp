@@ -48,7 +48,7 @@ int main() {
 
 std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<int>& problems) {
     std::vector<int>::iterator currentProblem = problems.begin();
-    std::vector<CoinUnit> coinPurse(*problems.rbegin() + 1);
+    std::vector<CoinUnit> coinPurse(*(problems.rbegin()) + 1);
     coinPurse.at(0) = { 0,0 };
     coinPurse.at(1) = { 1,1 };
 
@@ -189,9 +189,11 @@ void sizeVector(std::vector<int>& vec, std::string type) {
 void printResults(const std::vector<ResultStruct>& testResults, std::vector<int> denominations) {
     for (const auto& i : testResults) {
         std::cout << i.problem << " cents = ";
-        auto iter = denominations.begin();
-        while (iter != denominations.end()) {
-            std::cout << *iter << ":" << i.coins.at(*iter) << " ";
+        auto iter = denominations.rbegin();
+        while (iter != denominations.rend()) {
+            if (i.coins.find(*iter) != i.coins.end() && i.coins.at(*iter) != 0) {
+                std::cout << *iter << ":" << i.coins.at(*iter) << " ";
+            }
             iter++;
         }
         std::cout << std::endl;
