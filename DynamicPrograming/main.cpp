@@ -2,6 +2,7 @@
 #include <string>
 #include <exception>
 #include <vector>
+#include <map>
 #include <iterator>
 #include <algorithm>
 #include "CoinUnit.h"
@@ -12,18 +13,22 @@ void printResults(const std::vector<CoinUnit>& purse);
 
 std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>& problems);
 
-std::vector<CoinUnit> recursive(std::vector<int>& denominations, std::vector<int>& problems);
-CoinUnit solveIndex(std::vector<int>& denomiations, int value);
+std::map<int, std::vector<int>> recursive(std::vector<int>& denominations, std::vector<int>& problems);
+void solveIndex(std::vector<int>& denomiations, int value, std::vector<int>& solution);
 
 int main() {
-    std::vector<int> denomiations(0);
+    std::vector<int> denomiations = {1, 5, 10, 25};
     std::vector<int> problems(0);
 
-    sizeVector(denomiations, "DENOMIATION INPUT ");
+    /*sizeVector(denomiations, "DENOMIATION INPUT ");
 
-    //populate the Denomiations Vector
-    fillVector(denomiations, "Denomination input ");
-
+    do
+    {
+        //populate the Denomiations Vector
+        fillVector(denomiations, "Denomination input ");
+        std::sort(denomiations.begin(), denomiations.end());
+    } while (denomiations[0] != 1);
+    */
     //Get the number of problems
     sizeVector(problems, "NUMBER OF PROBLEMS ");
 
@@ -69,30 +74,50 @@ std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>&
     return coinPurse;
 }
 
-std::vector<CoinUnit> recursive(std::vector<int>& denominations, std::vector<int>& problems) {
-    std::vector<CoinUnit> coinpurse(problems.size());
-    for(int i = 0; i < problems.size(); i++){
-        coinpurse.at(i) = solveIndex(denominations, problems.at(i));
-    }
-    return coinpurse;
+std::map<int, std::vector<int>> recursive(std::vector<int>& denominations, std::vector<int>& problems) 
+{
+    std::map<int, std::vector<int>> solutions;
+
+    for (const auto& i : problems)
+    {
+        std::pair<int, std::vector<int>> probSolution;
+        probSolution.first = i;
+        solveIndex(denominations, i, probSolution.second);
+
+        solutions.insert(probSolution);
+   }
+
+    return solutions;
 }
 
-CoinUnit solveIndex(std::vector<int>& denomiations, int value) {
-    if (value == 1) {
-        return CoinUnit{1,1};
+void solveIndex(std::vector<int>& denomiations, int value, std::vector<int>& solution) 
+{
+    if (value < 1)
+    {
+        return;
     }
-    CoinUnit best = { 2000000, 2000000 };
-    std::vector<int>::iterator currentdenom = denomiations.begin();
-    while (currentdenom != denomiations.end()) {
-        CoinUnit temp = solveIndex(denomiations, value - *currentdenom);
-        if (best.count > temp.count) {
-            best.count = temp.count + 1;
-            best.lastCoin = *currentdenom;
+
+    int best = INT_MAX;
+    for (const auto& i : denomiations)
+    {
+        if (i == value)
+        {
+            solution.push_back(i);
+            return;
         }
 
-        std::next(currentdenom);
+        std::vector<int> temp;
+        solveIndex(denomiations, value - i, temp);
+
+        if (temp.size() < best && !temp.empty())
+        {
+            solution = temp;
+            solution.push_back(i);
+
+            best = temp.size();
+        }
     }
-    return best;
+    
 }
 
 void fillVector(std::vector<int>& vec, std::string type) {
