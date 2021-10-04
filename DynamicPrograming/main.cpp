@@ -14,14 +14,14 @@ void printResults(const std::vector<ResultStruct>& testResults, std::vector<int>
 
 std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>& problems);
 
-std::map<int, std::vector<int>> recursive(std::vector<int>& denominations, std::vector<int>& problems);
-void solveIndex(std::vector<int>& denomiations, int value, std::vector<int>& solution);
+std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const std::vector<int>& problems);
+void solveIndex(const std::vector<int>& denomiations, ResultStruct& solution);
 
 int main() {
-    std::vector<int> denomiations = {1, 5, 10, 25};
+    std::vector<int> denomiations(0);
     std::vector<int> problems(0);
 
-    /*sizeVector(denomiations, "DENOMIATION INPUT ");
+    sizeVector(denomiations, "DENOMIATION INPUT ");
 
     do
     {
@@ -29,7 +29,7 @@ int main() {
         fillVector(denomiations, "Denomination input ");
         std::sort(denomiations.begin(), denomiations.end());
     } while (denomiations[0] != 1);
-    */
+    
     //Get the number of problems
     sizeVector(problems, "NUMBER OF PROBLEMS ");
 
@@ -38,8 +38,9 @@ int main() {
 
     std::sort(problems.begin(), problems.end());
 
-    const auto dynamicPurse = bottomup(denomiations, problems);
-    //const auto dynamicPurse = recursive(denomiations, problems);
+    //const auto dynamicPurse = bottomup(denomiations, problems);
+    const auto dynamicPurse = recursive(denomiations, problems);
+    printResults(dynamicPurse, denomiations);
 
 }
 
@@ -80,7 +81,7 @@ std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>&
 
         auto obj = denomiations.begin();
         while (obj != denomiations.end()) {
-            subResult.coins.insert(*obj, 0);
+            subResult.coins.insert({ *obj, 0 });
             obj++;
         }
         while (index > 0) {
@@ -93,49 +94,68 @@ std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>&
     return coinPurse;
 }
 
-std::map<int, std::vector<int>> recursive(std::vector<int>& denominations, std::vector<int>& problems) 
+std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const std::vector<int>& problems) 
 {
-    std::map<int, std::vector<int>> solutions;
+    std::vector<ResultStruct> solutions;
 
     for (const auto& i : problems)
     {
-        std::pair<int, std::vector<int>> probSolution;
-        probSolution.first = i;
-        solveIndex(denominations, i, probSolution.second);
+        ResultStruct result;
+        result.problem = i;
 
-        solutions.insert(probSolution);
+        solveIndex(denominations, result);
+        solutions.push_back(result);
    }
 
     return solutions;
 }
 
-void solveIndex(std::vector<int>& denomiations, int value, std::vector<int>& solution) 
+void solveIndex(const std::vector<int>& denomiations, ResultStruct& solution)
 {
-    if (value < 1)
+    if (solution.problem < 1)
     {
+        solution.count = INT_MAX;
         return;
     }
 
     int best = INT_MAX;
+    ResultStruct bestSol;
     for (const auto& i : denomiations)
     {
-        if (i == value)
+        if (i == solution.problem)
         {
-            solution.push_back(i);
+            solution.coins.insert({ i, 1 });
+            solution.count = 1;
+
             return;
         }
 
-        std::vector<int> temp;
-        solveIndex(denomiations, value - i, temp);
+        ResultStruct temp;
+        temp.problem = solution.problem - i;
 
-        if (temp.size() < best && !temp.empty())
+        solveIndex(denomiations, temp);
+
+        if (temp.count < best)
         {
-            solution = temp;
-            solution.push_back(i);
+            bestSol = temp;
+            bestSol.problem += i;
+            
+            if (bestSol.coins.find(i) != bestSol.coins.end())
+            {
+                bestSol.coins.at(i) += 1;
+                bestSol.count += 1;
+            }
+            else
+            {
+                bestSol.coins.insert({ i, 1 });
+                bestSol.count += 1;
+            }
 
-            best = temp.size();
+            best = bestSol.count;
         }
     }
+
+    solution = bestSol;
     
 }
 
