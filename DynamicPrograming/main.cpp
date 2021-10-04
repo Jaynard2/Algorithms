@@ -12,23 +12,23 @@ void fillVector(std::vector<int>& vec, std::string type);
 void sizeVector(std::vector<int>& vec, std::string type);
 void printResults(const std::vector<ResultStruct>& testResults, std::vector<int> denominations);
 
-std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<int>& problems);
+std::vector<ResultStruct> bottomup(std::vector<int>& denominations, std::vector<int>& problems);
 
 std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const std::vector<int>& problems);
-void solveIndex(const std::vector<int>& denomiations, ResultStruct& solution);
+void solveIndex(const std::vector<int>& denominations, ResultStruct& solution);
 
 int main() {
-    std::vector<int> denomiations(0);
+    std::vector<int> denominations(0);
     std::vector<int> problems(0);
 
-    sizeVector(denomiations, "DENOMIATION INPUT ");
+    sizeVector(denominations, "DENOMINATION INPUT ");
 
     do
     {
         //populate the Denomiations Vector
-        fillVector(denomiations, "Denomination input ");
-        std::sort(denomiations.begin(), denomiations.end());
-    } while (denomiations[0] != 1);
+        fillVector(denominations, "Denomination input ");
+        std::sort(denominations.begin(), denominations.end());
+    } while (denominations[0] != 1);
     
     //Get the number of problems
     sizeVector(problems, "NUMBER OF PROBLEMS ");
@@ -38,15 +38,15 @@ int main() {
 
     std::sort(problems.begin(), problems.end());
 
-    const auto dynamicPurse = bottomup(denomiations, problems);
-    const auto recursivePurse = recursive(denomiations, problems);
+    const auto dynamicPurse = bottomup(denominations, problems);
+    const auto recursivePurse = recursive(denominations, problems);
 
-    printResults(dynamicPurse, denomiations);
-    printResults(recursivePurse, denomiations);
+    printResults(dynamicPurse, denominations);
+    printResults(recursivePurse, denominations);
 
 }
 
-std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<int>& problems) {
+std::vector<ResultStruct> bottomup(std::vector<int>& denominations, std::vector<int>& problems) {
     std::vector<int>::iterator currentProblem = problems.begin();
     std::vector<CoinUnit> coinPurse(*(problems.rbegin()) + 1);
     coinPurse.at(0) = { 0,0 };
@@ -54,8 +54,8 @@ std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<i
 
     for (int i = 2; i <= *problems.rbegin(); i++) {
         coinPurse.at(i) = { i + 1, i + 1 };
-        std::vector<int>::reverse_iterator obj = denomiations.rbegin();
-        while (obj != denomiations.rend()) {
+        std::vector<int>::reverse_iterator obj = denominations.rbegin();
+        while (obj != denominations.rend()) {
             int subp = i - *obj;
             if (subp >= 0 && coinPurse.at(i).count > 1 + coinPurse.at(subp).count) {
                 coinPurse.at(i).count = 1 + coinPurse.at(subp).count;
@@ -72,8 +72,8 @@ std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<i
         subResult.problem = index;
         subResult.count = coinPurse.at(index).count;
 
-        auto obj = denomiations.begin();
-        while (obj != denomiations.end()) {
+        auto obj = denominations.begin();
+        while (obj != denominations.end()) {
             subResult.coins.insert({ *obj, 0 });
             obj++;
         }
@@ -104,7 +104,7 @@ std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const
     return solutions;
 }
 
-void solveIndex(const std::vector<int>& denomiations, ResultStruct& solution)
+void solveIndex(const std::vector<int>& denominations, ResultStruct& solution)
 {
     if (solution.problem < 1)
     {
@@ -114,7 +114,7 @@ void solveIndex(const std::vector<int>& denomiations, ResultStruct& solution)
 
     int best = INT_MAX;
     ResultStruct bestSol;
-    for (const auto& i : denomiations)
+    for (const auto& i : denominations)
     {
         if (i == solution.problem)
         {
@@ -127,7 +127,7 @@ void solveIndex(const std::vector<int>& denomiations, ResultStruct& solution)
         ResultStruct temp;
         temp.problem = solution.problem - i;
 
-        solveIndex(denomiations, temp);
+        solveIndex(denominations, temp);
 
         if (temp.count < best)
         {
