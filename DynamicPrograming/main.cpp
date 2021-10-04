@@ -200,7 +200,9 @@ void printResults(const std::vector<ResultStruct>& testResults, std::vector<int>
         std::cout << i.problem << " cents = ";
         auto iter = denominations.begin();
         while (iter != denominations.end()) {
-            std::cout << *iter << ":" << i.coins.at(*iter) << " ";
+            if (i.coins.find(*iter) != i.coins.end()) {
+                std::cout << *iter << ":" << i.coins.at(*iter) << " ";
+            }
             iter++;
         }
         std::cout << std::endl;
