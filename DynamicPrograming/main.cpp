@@ -12,7 +12,7 @@ void fillVector(std::vector<int>& vec, std::string type);
 void sizeVector(std::vector<int>& vec, std::string type);
 void printResults(const std::vector<ResultStruct>& testResults, std::vector<int> denominations);
 
-std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>& problems);
+std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<int>& problems);
 
 std::map<int, std::vector<int>> recursive(std::vector<int>& denominations, std::vector<int>& problems);
 void solveIndex(std::vector<int>& denomiations, int value, std::vector<int>& solution);
@@ -21,13 +21,13 @@ int main() {
     std::vector<int> denomiations = {1, 5, 10, 25};
     std::vector<int> problems(0);
 
-    /*sizeVector(denomiations, "DENOMIATION INPUT ");
+    sizeVector(denomiations, "DENOMIATION INPUT ");
 
-    do
-    {
+    //do
+    //{
         //populate the Denomiations Vector
         fillVector(denomiations, "Denomination input ");
-        std::sort(denomiations.begin(), denomiations.end());
+    /*    std::sort(denomiations.begin(), denomiations.end());
     } while (denomiations[0] != 1);
     */
     //Get the number of problems
@@ -41,6 +41,8 @@ int main() {
     const auto dynamicPurse = bottomup(denomiations, problems);
     //const auto dynamicPurse = recursive(denomiations, problems);
 
+    printResults(dynamicPurse, denomiations);
+
 }
 
 /*
@@ -52,13 +54,13 @@ int main() {
 * 
 * Appears to get stuck on case 56 when checks for a solution with coin 24
 */
-std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>& problems) {
+std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<int>& problems) {
     std::vector<int>::iterator currentProblem = problems.begin();
-    std::vector<CoinUnit> coinPurse(*problems.rbegin());
-    coinPurse.at(0) = { 1,1 };
+    std::vector<CoinUnit> coinPurse(*problems.rbegin() + 1);
+    coinPurse.at(0) = { 0,0 };
     coinPurse.at(1) = { 1,1 };
 
-    for (int i = 2; i < *problems.rbegin(); i++) {
+    for (int i = 2; i <= *problems.rbegin(); i++) {
         coinPurse.at(i) = { i + 1, i + 1 };
         std::vector<int>::reverse_iterator obj = denomiations.rbegin();
         while (obj != denomiations.rend()) {
@@ -80,7 +82,7 @@ std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>&
 
         auto obj = denomiations.begin();
         while (obj != denomiations.end()) {
-            subResult.coins.insert(*obj, 0);
+            subResult.coins.insert({ *obj, 0 });
             obj++;
         }
         while (index > 0) {
@@ -88,9 +90,10 @@ std::vector<CoinUnit> bottomup(std::vector<int>& denomiations, std::vector<int>&
             subResult.coins.at(coin) = subResult.coins.at(coin) + 1;
             index -= coin;
         }
+        result.at(i) = subResult;
         currentProblem++;
     }
-    return coinPurse;
+    return result;
 }
 
 std::map<int, std::vector<int>> recursive(std::vector<int>& denominations, std::vector<int>& problems) 
@@ -174,10 +177,11 @@ void sizeVector(std::vector<int>& vec, std::string type) {
 
 void printResults(const std::vector<ResultStruct>& testResults, std::vector<int> denominations) {
     for (const auto& i : testResults) {
-        std::cout << i.problem << "cents ";
+        std::cout << i.problem << " cents = ";
         auto iter = denominations.begin();
         while (iter != denominations.end()) {
-            std::cout << *iter << ":" << i.coins.at(*iter);
+            std::cout << *iter << ":" << i.coins.at(*iter) << " ";
+            iter++;
         }
         std::cout << std::endl;
     }
