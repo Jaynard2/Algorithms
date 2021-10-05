@@ -1,5 +1,8 @@
 #include "MemoizationSolver.h"
 #include <algorithm>
+#ifndef INT_MAX
+    #define INT_MAX 2147483647
+#endif
 
 std::vector<ResultStruct> MemoizationSolver::operator()(const std::vector<int>& denoms, const std::vector<int>& problems)
 {
