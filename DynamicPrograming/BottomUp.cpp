@@ -11,8 +11,8 @@ std::vector<ResultStruct> bottomup(std::vector<int>& denominations, std::vector<
     coinPurse.at(1) = { 1,1 };
     for (int i = 2; i <= max; i++) {
         coinPurse.at(i) = { i + 1, i + 1 };
-        std::vector<int>::reverse_iterator obj = denominations.rbegin();
-        while (obj != denominations.rend()) {
+        std::vector<int>::iterator obj = denominations.begin();
+        while (obj != denominations.end()) {
             int subp = i - *obj;
             if (subp >= 0 && coinPurse.at(i).count > 1 + coinPurse.at(subp).count) {
                 coinPurse.at(i).count = 1 + coinPurse.at(subp).count;
