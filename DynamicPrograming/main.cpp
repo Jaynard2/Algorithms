@@ -57,7 +57,7 @@ int main() {
 */
 std::vector<ResultStruct> bottomup(std::vector<int>& denomiations, std::vector<int>& problems) {
     std::vector<int>::iterator currentProblem = problems.begin();
-    std::vector<CoinUnit> coinPurse(*(problems.rbegin()) + 1);
+    std::vector<CoinUnit> coinPurse((*problems.rbegin()) + 1);
     coinPurse.at(0) = { 0,0 };
     coinPurse.at(1) = { 1,1 };
 
