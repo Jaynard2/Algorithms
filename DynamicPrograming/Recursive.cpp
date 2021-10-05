@@ -1,5 +1,9 @@
 #include "MakeChange.h"
 
+#ifndef INT_MAX
+#define INT_MAX 2147483647
+#endif
+
 std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const std::vector<int>& problems)
 {
     std::vector<ResultStruct> solutions;
