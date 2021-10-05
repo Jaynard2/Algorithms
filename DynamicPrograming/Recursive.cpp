@@ -10,11 +10,6 @@ std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const
 
     for (const auto& i : problems)
     {
-        if (i > 40)
-        {
-            break;
-        }
-
         ResultStruct result;
         result.problem = i;
 
@@ -37,6 +32,11 @@ void solveIndex(const std::vector<int>& denominations, ResultStruct& solution)
     bestSol.count = INT_MAX;
     for (const auto& i : denominations)
     {
+        if (i == 1 && solution.problem > 40)
+        {
+            continue;
+        }
+
         if (i == solution.problem)
         {
             solution.coins.insert({ i, 1 });
