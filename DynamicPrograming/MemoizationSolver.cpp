@@ -1,10 +1,12 @@
 #include "MemoizationSolver.h"
+#include <algorithm>
 
 std::vector<ResultStruct> MemoizationSolver::operator()(const std::vector<int>& denoms, const std::vector<int>& problems)
 {
     std::vector<ResultStruct> solutions;
 
-    _results.resize(problems.back());
+    const auto& max = std::max_element(problems.begin(), problems.end());
+    _results.resize(*max);
     for (auto& i : _results)
     {
         i.problem = -1;
