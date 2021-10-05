@@ -18,21 +18,24 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CoinUnit.cpp">
+    <ClCompile Include="MemoizationSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResultStruct.h">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="BottomUp.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MemoizationSolver.cpp">
+    <ClCompile Include="Recursive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoinUnit.h">
+    <ClInclude Include="MakeChange.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemoizationSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultStruct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

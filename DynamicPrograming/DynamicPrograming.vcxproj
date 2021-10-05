@@ -139,14 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CoinUnit.cpp" />
+    <ClCompile Include="BottomUp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MemoizationSolver.cpp" />
-    <ClCompile Include="ResultStruct.h" />
+    <ClCompile Include="Recursive.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoinUnit.h" />
+    <ClInclude Include="MakeChange.h" />
     <ClInclude Include="MemoizationSolver.h" />
+    <ClInclude Include="ResultStruct.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
