@@ -4,6 +4,15 @@
 #include <iterator>
 #include <algorithm>
 #include <exception>
+/*********************************************************
+* Summary: The bottom up implementation for counting coins.
+*
+* Author: Nathan Cook
+* Created: Oct 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 
 std::vector<ResultStruct> bottomup(std::vector<int>& denominations, std::vector<int>& problems) {
     int max = *std::max_element(problems.begin(), problems.end());
