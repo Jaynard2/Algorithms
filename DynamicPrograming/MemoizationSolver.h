@@ -14,6 +14,8 @@
 class MemoizationSolver
 {
 public:
+	//Returns a vector containing the total amount of money, the total amount of coins, and the breakdown
+	//of what coins are used
 	std::vector<ResultStruct> operator()(const std::vector<int>& denoms, const std::vector<int>& problems);
 
 private:

@@ -13,6 +13,7 @@
     #define INT_MAX 2147483647
 #endif
 
+//Returns vector 
 std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const std::vector<int>& problems)
 {
     std::vector<ResultStruct> solutions;
@@ -41,6 +42,7 @@ void solveIndex(const std::vector<int>& denominations, ResultStruct& solution)
     bestSol.count = INT_MAX;
     for (const auto& i : denominations)
     {
+        //Speed up program by ignoring some solutions when the problem is suffeciently large
         if (i == 1 && solution.problem > 40)
         {
             continue;
