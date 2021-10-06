@@ -1,5 +1,14 @@
 #include "MemoizationSolver.h"
 #include <algorithm>
+/*********************************************************
+* Summary: Definition for MemoizationSolver
+*
+* Author: Joshua Grieve
+* Created: Oct 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 #ifndef INT_MAX
     #define INT_MAX 2147483647
 #endif

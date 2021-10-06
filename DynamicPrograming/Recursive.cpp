@@ -1,4 +1,14 @@
 #include "MakeChange.h"
+/*********************************************************
+* Summary: Implementation of the recursive method for coin counting,
+* as well as a helper method.
+*
+* Author: Joshua Grieve
+* Created: Oct 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 #ifndef INT_MAX
     #define INT_MAX 2147483647
 #endif

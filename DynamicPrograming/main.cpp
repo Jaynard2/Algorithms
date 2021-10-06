@@ -1,3 +1,13 @@
+/*********************************************************
+* Summary: Entry point of the program. Reads in user input for denominations
+* and problems and starts the different algorithms.
+*
+* Author: Nathan Cook
+* Created: Oct 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 #include <iostream>
 #include <vector>
 #include <algorithm>
