@@ -6,8 +6,11 @@
 * Summary: Common file for declaring function signitures. 
 * Makes working with Gradel easier.
 *
-* Author: Nathan Cook
+* Author: Nathanael Cook
 * Created: Oct 2021
+* 
+* Header for both the bottomup and the recursive algorithms. This also contians
+* the definition for the Coin Unit which is used internally.
 *
 * ©Copyright Cedarville University, its Computer Science faculty, and the
 * authors. All rights reserved.

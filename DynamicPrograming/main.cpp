@@ -2,8 +2,10 @@
 * Summary: Entry point of the program. Reads in user input for denominations
 * and problems and starts the different algorithms.
 *
-* Author: Nathan Cook
+* Author: Nathanael Cook
 * Created: Oct 2021
+* 
+* Running the test and handle all io, so taking in the parameters and printing the results of the tests
 *
 * ©Copyright Cedarville University, its Computer Science faculty, and the
 * authors. All rights reserved.
@@ -49,6 +51,7 @@ int main() {
 }
 
 void fillVector(std::vector<int>& vec, std::string type) {
+    //this is called after the size has been given it reads in all the values into the buffer
     std::string buffer = "";
     for (int i = 0; i < vec.size(); i++) {
         try {
@@ -63,6 +66,7 @@ void fillVector(std::vector<int>& vec, std::string type) {
 }
 
 void sizeVector(std::vector<int>& vec, std::string type) {
+    //this is called to get the intial size of each vector. 
     std::string buffer = "";
     int temp = 0;
     std::getline(std::cin, buffer);
@@ -76,10 +80,14 @@ void sizeVector(std::vector<int>& vec, std::string type) {
 }
 
 void printResults(const std::vector<ResultStruct>& testResults, std::vector<int> denominations) {
+    // all test return a vector of Result Structs this function the reads the valeus and prints them out
+    // also sorting through the empty values that were not used
     for (const auto& i : testResults) {
         std::cout << i.problem << " cents =";
         auto iter = denominations.rbegin();
+        // loops thought for number of each denomitation used
         while (iter != denominations.rend()) {
+            //checks if coin was used in test or it the coin was initalozed but then not used
             if (i.coins.find(*iter) != i.coins.end() && i.coins.at(*iter) != 0) {
                 std::cout << " " << * iter << ":" << i.coins.at(*iter);
             }
