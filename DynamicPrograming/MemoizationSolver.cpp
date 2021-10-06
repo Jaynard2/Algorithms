@@ -13,12 +13,16 @@
     #define INT_MAX 2147483647
 #endif
 
+//Returns a vector containing the total amount of money, the total amount of coins, and the breakdown
+//of what coins are used.
 std::vector<ResultStruct> MemoizationSolver::operator()(const std::vector<int>& denoms, const std::vector<int>& problems)
 {
     std::vector<ResultStruct> solutions;
 
     const auto& max = std::max_element(problems.begin(), problems.end());
     _results.resize(*max);
+
+    //set all values as an impossible value to mark what values have not been calculated
     for (auto& i : _results)
     {
         i.problem = -1;
