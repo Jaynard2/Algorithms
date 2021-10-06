@@ -13,7 +13,8 @@
     #define INT_MAX 2147483647
 #endif
 
-//Returns vector 
+//Returns a vector containing the total amount of money, the total amount of coins, and the breakdown
+//of what coins are used.
 std::vector<ResultStruct> recursive(const std::vector<int>& denominations, const std::vector<int>& problems)
 {
     std::vector<ResultStruct> solutions;
