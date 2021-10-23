@@ -6,7 +6,7 @@
 
 int RunTests(std::fstream& fin, GalaxyTester& COBOL);
 std::vector<std::string> StringSplit(std::string& in, char delim);
-std::vector<int> sArraytoiArray(std::vector<std::string>& in);
+std::vector<int> sArraytoiArray(std::vector<std::string> in);
 
 int main() {
 	std::fstream filestream;
@@ -74,7 +74,7 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
 }
 
 std::vector<std::string> StringSplit(std::string& in, char delim) {
-
+	
 }
 
 std::vector<int> sArraytoiArray(std::vector<std::string> in) {
