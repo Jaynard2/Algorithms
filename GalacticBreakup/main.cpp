@@ -77,7 +77,7 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
 		if (params.size() < 4) {
 			return -2;
 		}
-		COBOL.initTest(params[0], params[1], params[3]);
+		COBOL.initTest(params[0], params[1], params[2]);
 		for (int j = 0; j < params[3] && !fin.fail() && !fin.eof(); j++) {
 			temp = "";
 			std::getline(fin, temp);
