@@ -39,8 +39,17 @@ int main() {
 		std::cout << "SUCCESS opened file: " << filename << std::endl;
 
 		switch (RunTests(filestream, GT)) {
+		case(-1) :
+			std::cout << "Invalid Problem count" << std::endl;
+			break;
+		case(-2) :
+			std::cout << "Invalid Galaxy Dementions" << std::endl;
+			break;
 		default:
 			std::cout << "Read Finished" << std::endl;
+		}
+		for (auto obj : GT.getResult()) {
+			std::cout << obj << std::endl;
 		}
 	}
 	else {
@@ -69,13 +78,14 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
 			return -2;
 		}
 		COBOL.initTest(params[0], params[1], params[3]);
-		for (int j = 0; j < params[3] && !fin.fail() || !fin.eof(); j++) {
+		for (int j = 0; j < params[3] && !fin.fail() && !fin.eof(); j++) {
 			temp = "";
 			std::getline(fin, temp);
 			COBOL.AddEvent(sArraytoiArray(stringSplit(temp, ' ')));
 		}
 		COBOL.Test();
 	}
+	fin.close();
 }
 
 std::vector<std::string> stringSplit(std::string& in, char delim) 
