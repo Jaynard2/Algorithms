@@ -1,5 +1,6 @@
 #include "GalaxyMap.h"
 #include <algorithm>
+
 /*********************************************************
 * Summary: Impl for GalaxyMap
 *
@@ -9,7 +10,6 @@
 * ©Copyright Cedarville University, its Computer Science faculty, and the
 * authors. All rights reserved.
 ********************************************************/
-
 
 void GalaxyMap::create(int x, int y, int z)
 {
