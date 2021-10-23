@@ -18,6 +18,8 @@ bool GalaxyTester::Test() {
 	_GM.createEmpireSets();
 	_result.push_back(0);
 
+	_GM.mergeKingdom(_Timeline.top()[0]);
+	_Timeline.pop();
 
 	if (!_GM.empireConncted()) {
 		_result.back() += 1;

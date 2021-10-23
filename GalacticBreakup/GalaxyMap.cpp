@@ -97,7 +97,7 @@ void GalaxyMap::createEmpireSets()
 				}
 				if (j < _map[i].size() - 1)
 				{
-					DisjointNode* set = findSet(&_map[i + 1][j + 1][k]);
+					DisjointNode* set = findSet(&_map[i][j + 1][k]);
 					if (cur != set && std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
 					{
 						combine(cur, set);
