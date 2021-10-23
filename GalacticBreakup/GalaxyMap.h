@@ -2,31 +2,33 @@
 #include <vector>
 #include <list>
 
-struct Domain
+struct DisjointNode
 {
-	char kingdom;
-	Domain* parent;
-	int rank;
+	unsigned rank;
+	DisjointNode* parent;
 };
 
 class GalaxyMap
 {
 public:
 
-	void create(unsigned x, unsigned y, unsigned z);
+	void create(int x, int y, int z);
 	void reset();
 
-	void addKingdom(char id, const std::vector<int>& domains);
-	void createSets();
+	void addKingdom(const std::vector<int>& domains);
+	void createEmpireSets();
 
-	unsigned countKingdomOccurences(char id) const;
-	void mergeKingdoms(unsigned id1, unsigned id2);
+	bool empireConncted() const;
+	void mergeKingdom(int domain);
 
 private:
-	unsigned _length;
-	std::vector<std::vector<std::vector<Domain>>> _map;
-	std::list<Domain*> _roots;
+	std::vector<std::vector<std::vector<DisjointNode>>> _map;
+	std::list<DisjointNode*> _empireRoots;
+	std::list<DisjointNode*> _kingdomRoots;
 
+	void combine(DisjointNode* node1, DisjointNode* node2);
+	void link(DisjointNode* root1, DisjointNode* root2);
+	DisjointNode* findSet(DisjointNode* node);
 
 };
 
