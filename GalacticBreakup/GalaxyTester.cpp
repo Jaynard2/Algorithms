@@ -11,8 +11,15 @@ void GalaxyTester::AddEvent(std::vector<int> evt) {
 	}
 	evt.erase(--evt.end());
 	_Timeline.push(evt);
+	_GM.addKingdom(_Timeline.size() + 'A', evt);
 }
 
 int GalaxyTester::Test() {
+	_GM.createSets();
+	_result.push_back(0);
 
+
+	if (_GM.countKingdomOccurences(0) > 1) {
+		_result.back() += 1;
+	}
 }
