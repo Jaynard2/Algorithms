@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
+#include <ShObjIdl.h>
 #include <fstream>
 #include "GalexyTester.h"
 
@@ -10,19 +11,21 @@ std::vector<int> sArraytoiArray(std::vector<std::string> in);
 
 int main() {
 	std::fstream filestream;
-	LPWSTR filename = LPWSTR("");
-	OPENFILENAME fin;
 	GalaxyTester GT;
 
-	ZeroMemory(&fin, sizeof(fin));
-	fin.lStructSize = sizeof(fin);
-	fin.hwndOwner = NULL;
-	fin.lpstrFilter = L"Text Files \0*.txt\0Any File\0*.*\0";
-	fin.lpstrFile = filename;
-	fin.lpstrTitle = L"Select Test file";
-	fin.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	IFileOpenDialog* pFileOpen;
 
-	if (GetOpenFileNameW(&fin)) {
+	// Create the FileOpenDialog object.
+	hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+	hr = pFileOpen->Show(NULL);
+
+
+	if(SUCCEEDED(hr)) {
+		IShellItem* pItem;
+		hr = pFileOpen->GetResult(&pItem);
+		PWSTR filename;
+		hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &filename);
 		try {
 			filestream.open(filename, std::ios_base::in);
 		}
@@ -30,13 +33,24 @@ int main() {
 			std::cout << "File Failed to Open" << std::endl;
 			return -1;
 		}
+		pItem->Release();
+		pFileOpen->Release();
+		CoUninitialize();
 		std::cout << "SUCCESS opened file: " << filename << std::endl;
 
 		switch (RunTests(filestream, GT)) {
+		case(-1) :
+			std::cout << "Invalid Problem count" << std::endl;
+			break;
+		case(-2) :
+			std::cout << "Invalid Galaxy Dementions" << std::endl;
+			break;
 		default:
 			std::cout << "Read Finished" << std::endl;
 		}
-
+		for (auto obj : GT.getResult()) {
+			std::cout << obj << std::endl;
+		}
 	}
 	else {
 		std::cout << "Failed to open file" << std::endl;
@@ -64,13 +78,14 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
 			return -2;
 		}
 		COBOL.initTest(params[0], params[1], params[3]);
-		for (int j = 0; j < params[3] && !fin.fail() || !fin.eof(); j++) {
+		for (int j = 0; j < params[3] && !fin.fail() && !fin.eof(); j++) {
 			temp = "";
 			std::getline(fin, temp);
 			COBOL.AddEvent(sArraytoiArray(stringSplit(temp, ' ')));
 		}
 		COBOL.Test();
 	}
+	fin.close();
 }
 
 std::vector<std::string> stringSplit(std::string& in, char delim) 
