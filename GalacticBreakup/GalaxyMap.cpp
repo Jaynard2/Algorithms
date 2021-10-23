@@ -79,7 +79,7 @@ void GalaxyMap::createSets()
 	}
 }
 
-unsigned GalaxyMap::countKingdomSplits(char id) const
+unsigned GalaxyMap::countKingdomOccurences(char id) const
 {
 	int count = 0;
 	for (const auto& i : _roots)

@@ -19,7 +19,7 @@ public:
 	void addKingdom(char id, const std::vector<int>& domains);
 	void createSets();
 
-	unsigned countKingdomSplits(char id) const;
+	unsigned countKingdomOccurences(char id) const;
 	void mergeKingdoms(unsigned id1, unsigned id2);
 
 private:
