@@ -38,6 +38,8 @@ public:
 
 	bool empty() const { return _root == nullptr; }
 
+	int getHeight() const { return _height; }
+
 	friend std::ostream& operator<< <T>(std::ostream& out, const RedBlackTree<T>& tree);
 
 private:
@@ -93,7 +95,7 @@ inline void RedBlackTree<T>::remove(const T& data)
 template<typename T>
 inline std::ostream& operator<<(std::ostream& out, const RedBlackTree<T>& tree)
 {
-	tree.print(out, "", tree._root);
+	tree.print(out, std::string(tree._height, " "), tree._root);
 
 	return out;
 }
@@ -310,6 +312,11 @@ inline void RedBlackTree<T>::fixDeletion(Node<T>*n)
 template<typename T>
 inline void RedBlackTree<T>::print(std::ostream& out, std::string leftText, Node<T>*n) const
 {
+	if (n->sentinal)
+		return;
+
+	out << leftText << n;
+
 	
 }
 
