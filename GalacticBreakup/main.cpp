@@ -5,8 +5,8 @@
 #include "GalexyTester.h"
 
 int RunTests(std::fstream& fin, GalaxyTester& COBOL);
-std::vector<std::string> StringSplit(std::string& in, char delim);
-std::vector<int> sArraytoiArray(std::vector<std::string>& in);
+std::vector<std::string> stringSplit(std::string& in, char delim = ' ');
+std::vector<int> sArraytoiArray(std::vector<std::string> in);
 
 int main() {
 	std::fstream filestream;
@@ -59,7 +59,7 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
 	for (int i = 0; i < testnumber && !fin.fail() && !fin.eof(); i++) {
 		temp = "";
 		std::getline(fin, temp);
-		auto params = sArraytoiArray(StringSplit(temp, ' '));
+		auto params = sArraytoiArray(stringSplit(temp, ' '));
 		if (params.size() < 4) {
 			return -2;
 		}
@@ -69,10 +69,31 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
 	}
 }
 
-std::vector<std::string> StringSplit(std::string& in, char delim) {
+std::vector<std::string> stringSplit(std::string& in, char delim) 
+{
+	size_t begin = 0;
+	size_t end = in.find(delim);
 
+	std::vector<std::string> vec;
+	do
+	{
+		vec.emplace_back(in, begin, end - begin);
+
+		begin = end + 1;
+		end = in.find(delim, begin);
+
+	} while (begin != 0);
+
+	return vec;
 }
 
-std::vector<int> sArraytoiArray(std::vector<std::string> in) {
-	
+std::vector<int> sArraytoiArray(std::vector<std::string> in) 
+{
+	std::vector<int> vec;
+	for (const auto& i : in)
+	{
+		vec.emplace_back(std::stoi(i));
+	}
+
+	return vec;
 }
