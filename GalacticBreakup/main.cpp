@@ -67,7 +67,7 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
 		for (int j = 0; j < params[3] && !fin.fail() || !fin.eof(); j++) {
 			temp = "";
 			std::getline(fin, temp);
-			COBOL.AddEvent(sArraytoiArray(StringSplit(temp, ' ')));
+			COBOL.AddEvent(sArraytoiArray(stringSplit(temp, ' ')));
 		}
 		COBOL.Test();
 	}
