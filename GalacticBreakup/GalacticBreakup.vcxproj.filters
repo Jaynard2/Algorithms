@@ -26,5 +26,8 @@
     <ClInclude Include="GalaxyMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GalexyTester.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
