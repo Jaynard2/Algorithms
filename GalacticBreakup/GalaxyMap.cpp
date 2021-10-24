@@ -22,7 +22,9 @@ void GalaxyMap::create(int x, int y, int z)
 
 void GalaxyMap::reset()
 {
-	
+	_map.clear();
+	_kingdomRoots.clear();
+	_empireRoots.clear();
 }
 
 void GalaxyMap::addKingdom(const std::vector<int>& domains)
@@ -121,6 +123,7 @@ void GalaxyMap::createEmpireSets()
 					}
 				}
 
+				cur = findSet(cur);
 				if (std::find(_empireRoots.begin(), _empireRoots.end(), cur) == _empireRoots.end())
 				{
 					_empireRoots.push_back(cur);
@@ -128,6 +131,8 @@ void GalaxyMap::createEmpireSets()
 			}
 		}
 	}
+
+	_empireRoots.remove_if([](const auto* n) { return n != n->parent; });
 }
 
 bool GalaxyMap::empireConncted()const
