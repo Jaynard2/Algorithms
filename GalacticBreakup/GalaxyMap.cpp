@@ -1,5 +1,14 @@
 #include "GalaxyMap.h"
 #include <algorithm>
+/*********************************************************
+* Summary: Impl for GalaxyMap
+*
+* Author: Joshua Grieve
+* Created: Oct 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 
 
 void GalaxyMap::create(int x, int y, int z)
@@ -31,6 +40,7 @@ void GalaxyMap::addKingdom(const std::vector<int>& domains)
 {
 	for (int i = 0; i < domains.size() - 1; i++)
 	{
+		//Math to calculate indexs from domain
 		int x1 = domains[i] % _map.size();
 		int y1 = (domains[i] / _map.size()) % _map[x1].size();
 		int z1 = ((domains[i] / _map.size()) / _map[x1].size()) % _map[x1][y1].size();
@@ -48,6 +58,7 @@ void GalaxyMap::addKingdom(const std::vector<int>& domains)
 	int y = (domains[0] / _map.size()) % _map[x].size();
 	int z = ((domains[0] / _map.size()) / _map[x].size()) % _map[x][y].size();
 
+	//Add kingdom sets to a list. This is helpful for creating the empire sets later
 	DisjointNode* set = findSet(&_map[x][y][z]);
 	if (std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
 	{
@@ -58,6 +69,8 @@ void GalaxyMap::addKingdom(const std::vector<int>& domains)
 
 void GalaxyMap::createEmpireSets()
 {
+	//Doesn't actually delete the roots. This makes us "lose" them, so that we don't
+	//have to check for duplicates
 	_empireRoots.clear();
 
 	for (int i = 0; i < _map.size(); i++)
@@ -69,6 +82,7 @@ void GalaxyMap::createEmpireSets()
 				DisjointNode* cur = findSet(&_map[i][j][k]);
 				if (std::find(_kingdomRoots.begin(), _kingdomRoots.end(), cur) != _kingdomRoots.end())
 				{
+					//Do not process kingdom nodes
 					continue;
 				}
 
@@ -126,12 +140,14 @@ void GalaxyMap::createEmpireSets()
 				cur = findSet(cur);
 				if (std::find(_empireRoots.begin(), _empireRoots.end(), cur) == _empireRoots.end())
 				{
+					//Add roots to list so that they can be counted
 					_empireRoots.push_back(cur);
 				}
 			}
 		}
 	}
 
+	//Nodes that were roots may have become children
 	_empireRoots.remove_if([](const auto* n) { return n != n->parent; });
 }
 
@@ -142,6 +158,7 @@ bool GalaxyMap::empireConncted()const
 
 void GalaxyMap::mergeKingdom(int domain)
 {
+	//Math to calculate indexs from domain
 	int x = domain % _map.size();
 	int y = (domain / _map.size()) % _map[x].size();
 	int z = ((domain / _map.size()) / _map[x].size()) % _map[x][y].size();
@@ -149,6 +166,7 @@ void GalaxyMap::mergeKingdom(int domain)
 	DisjointNode* set = findSet(&_map[x][y][z]);
 	_kingdomRoots.remove_if([&](auto n) { return n == set; });
 
+	//Recreate empire sets with new edges
 	createEmpireSets();
 	
 }
