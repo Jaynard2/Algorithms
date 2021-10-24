@@ -16,7 +16,7 @@ void GalaxyTester::AddEvent(std::vector<int> evt) {
 
 bool GalaxyTester::Test() {
 	_GM.createEmpireSets();
-	_result.push_back(0);
+	_result.push_back((int)(!_GM.empireConncted()));
 
 	while (_Timeline.size() > 0) {
 		_GM.mergeKingdom(_Timeline.top()[0]);
