@@ -22,8 +22,7 @@ void GalaxyMap::create(int x, int y, int z)
 			_map[i][j].resize(z);
 			for (int k = 0; k < z; k++)
 			{
-				_map[i][j][k].parent = &_map[i][j][k];
-				_map[i][j][k].rank = 0;
+				_map[i][j][k].parent = nullptr;
 			}
 		}
 	}
@@ -32,39 +31,7 @@ void GalaxyMap::create(int x, int y, int z)
 void GalaxyMap::reset()
 {
 	_map.clear();
-	_kingdomRoots.clear();
 	_empireRoots.clear();
-}
-
-void GalaxyMap::addKingdom(const std::vector<int>& domains)
-{
-	for (int i = 0; i < domains.size() - 1; i++)
-	{
-		//Math to calculate indexs from domain
-		int x1 = domains[i] % _map.size();
-		int y1 = (domains[i] / _map.size()) % _map[x1].size();
-		int z1 = ((domains[i] / _map.size()) / _map[x1].size()) % _map[x1][y1].size();
-
-		int x2 = domains[i + 1] % _map.size();
-		int y2 = (domains[i + 1] / _map.size()) % _map[x2].size();
-		int z2 = ((domains[i + 1] / _map.size()) / _map[x2].size()) % _map[x2][y2].size();
-
-		combine(&_map[x1][y1][z1], &_map[x2][y2][z2]);
-		
-		
-	}
-
-	int x = domains[0] % _map.size();
-	int y = (domains[0] / _map.size()) % _map[x].size();
-	int z = ((domains[0] / _map.size()) / _map[x].size()) % _map[x][y].size();
-
-	//Add kingdom sets to a list. This is helpful for creating the empire sets later
-	DisjointNode* set = findSet(&_map[x][y][z]);
-	if (std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
-	{
-		_kingdomRoots.push_back(set);
-	}
-	
 }
 
 void GalaxyMap::createEmpireSets()
@@ -79,65 +46,65 @@ void GalaxyMap::createEmpireSets()
 		{
 			for (int k = 0; k < _map[i][j].size(); k++)
 			{
-				DisjointNode* cur = findSet(&_map[i][j][k]);
-				if (std::find(_kingdomRoots.begin(), _kingdomRoots.end(), cur) != _kingdomRoots.end())
+				if (_map[i][j][k].parent == nullptr)
 				{
 					//Do not process kingdom nodes
 					continue;
 				}
 
+				auto cur = findSet(&_map[i][j][k]);
+
 				if (i > 0)
 				{
-					DisjointNode* set = findSet(&_map[i - 1][j][k]);
-					if (cur != set && std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
+					if ( _map[i - 1][j][k].parent != nullptr && cur != findSet(&_map[i - 1][j][k]))
 					{
-						combine(cur, set);
+						combine(cur, &_map[i - 1][j][k]);
+						cur = findSet(&_map[i][j][k]);
 					}
 				}
 				if (i < _map.size() - 1)
 				{
-					DisjointNode* set = findSet(&_map[i + 1][j][k]);
-					if (cur != set && std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
+					if (_map[i + 1][j][k].parent != nullptr && cur != findSet(&_map[i + 1][j][k]))
 					{
-						combine(cur, set);
+						combine(cur, &_map[i + 1][j][k]);
+						cur = findSet(&_map[i][j][k]);
 					}
 				}
 
 				if (j > 0)
 				{
-					DisjointNode* set = findSet(&_map[i][j - 1][k]);
-					if (cur != set && std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
+					if (_map[i][j - 1][k].parent != nullptr && cur != findSet(&_map[i][j - 1][k]))
 					{
-						combine(cur, set);
+						combine(cur, &_map[i][j - 1][k]);
+						cur = findSet(&_map[i][j][k]);
 					}
 				}
 				if (j < _map[i].size() - 1)
 				{
-					DisjointNode* set = findSet(&_map[i][j + 1][k]);
-					if (cur != set && std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
+					if (_map[i][j + 1][k].parent != nullptr && cur != findSet(&_map[i][j + 1][k]))
 					{
-						combine(cur, set);
+						combine(cur, &_map[i][j + 1][k]);
+						cur = findSet(&_map[i][j][k]);
 					}
 				}
 
 				if (k > 0)
 				{
-					DisjointNode* set = findSet(&_map[i][j][k - 1]);
-					if (cur != set && std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
+					if (_map[i][j][k - 1].parent != nullptr && cur != findSet(&_map[i][j][k - 1]))
 					{
-						combine(cur, set);
+						combine(cur, &_map[i][j][k - 1]);
+						cur = findSet(&_map[i][j][k]);
 					}
 				}
 				if (k < _map[i][j].size() - 1)
 				{
-					DisjointNode* set = findSet(&_map[i][j][k + 1]);
-					if (cur != set && std::find(_kingdomRoots.begin(), _kingdomRoots.end(), set) == _kingdomRoots.end())
+					if (_map[i][j][k + 1].parent != nullptr && cur != findSet(&_map[i][j][k + 1]))
 					{
-						combine(cur, set);
+						combine(cur, &_map[i][j][k + 1]);
+						cur = findSet(&_map[i][j][k]);
 					}
 				}
 
-				cur = findSet(cur);
 				if (std::find(_empireRoots.begin(), _empireRoots.end(), cur) == _empireRoots.end())
 				{
 					//Add roots to list so that they can be counted
@@ -156,15 +123,18 @@ bool GalaxyMap::empireConncted()const
 	return _empireRoots.size() < 2;
 }
 
-void GalaxyMap::mergeKingdom(int domain)
+void GalaxyMap::mergeKingdom(const std::vector<int>& domains)
 {
-	//Math to calculate indexs from domain
-	int x = domain % _map.size();
-	int y = (domain / _map.size()) % _map[x].size();
-	int z = ((domain / _map.size()) / _map[x].size()) % _map[x][y].size();
+	for (const auto& i : domains)
+	{
+		int x = i % _map.size();
+		int y = (i / _map.size()) % _map[x].size();
+		int z = (i / _map.size() / _map[x].size()) % _map[x][y].size();
 
-	DisjointNode* set = findSet(&_map[x][y][z]);
-	_kingdomRoots.remove_if([&](auto n) { return n == set; });
+		auto& n = _map[x][y][z];
+		n.rank = 0;
+		n.parent = &n;
+	}
 
 	//Recreate empire sets with new edges
 	createEmpireSets();

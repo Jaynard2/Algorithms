@@ -25,20 +25,17 @@ public:
 	void create(int x, int y, int z);
 	void reset();
 
-	//Creates kingdom sets using domains given in vector
-	void addKingdom(const std::vector<int>& domains);
-	//Makes any set that is not a kingdom an empire set
-	void createEmpireSets();
-
 	//returns true if empire is continuous
 	bool empireConncted() const;
 	//Merges a kingdom set that contains the domain with an empire set
-	void mergeKingdom(int domain);
+	void mergeKingdom(const std::vector<int>& domains);
 
 private:
 	std::vector<std::vector<std::vector<DisjointNode>>> _map;
 	std::list<DisjointNode*> _empireRoots;
-	std::list<DisjointNode*> _kingdomRoots;
+
+	//Makes any set that is not a kingdom an empire set
+	void createEmpireSets();
 
 	void combine(DisjointNode* node1, DisjointNode* node2);
 	void link(DisjointNode* root1, DisjointNode* root2);

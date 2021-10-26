@@ -9,51 +9,31 @@ int RunTests(std::fstream& fin, GalaxyTester& COBOL);
 std::vector<std::string> stringSplit(std::string& in, char delim = ' ');
 std::vector<int> sArraytoiArray(std::vector<std::string> in);
 
-int main() {
-	std::fstream filestream;
-	GalaxyTester GT;
+int main()
+{
+	GalaxyTester COBOL;
 
-	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-	IFileOpenDialog* pFileOpen;
+	std::string temp = "";
 
-	// Create the FileOpenDialog object.
-	hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
-	hr = pFileOpen->Show(NULL);
-
-
-	if(SUCCEEDED(hr)) {
-		IShellItem* pItem;
-		hr = pFileOpen->GetResult(&pItem);
-		PWSTR filename;
-		hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &filename);
-		try {
-			filestream.open(filename, std::ios_base::in);
-		}
-		catch (std::ios_base::failure e) {
-			std::cout << "File Failed to Open" << std::endl;
-			return -1;
-		}
-		pItem->Release();
-		pFileOpen->Release();
-		CoUninitialize();
-		std::cout << "SUCCESS opened file: " << filename << std::endl;
-
-		switch (RunTests(filestream, GT)) {
-		case(-1) :
-			std::cout << "Invalid Problem count" << std::endl;
-			break;
-		case(-2) :
-			std::cout << "Invalid Galaxy Dementions" << std::endl;
-			break;
-		default:
-			std::cout << "Read Finished" << std::endl;
-		}
-		for (auto obj : GT.getResult()) {
-			std::cout << obj << std::endl;
-		}
+	temp = "";
+	std::getline(std::cin, temp);
+	auto params = sArraytoiArray(stringSplit(temp, ' '));
+	if (params.size() < 4)
+	{
+		return -2;
 	}
-	else {
-		std::cout << "Failed to open file" << std::endl;
+	COBOL.initTest(params[0], params[1], params[2]);
+	for (int j = 0; j < params[3]; j++)
+	{
+		temp = "";
+		std::getline(std::cin, temp);
+		COBOL.AddEvent(sArraytoiArray(stringSplit(temp, ' ')));
+	}
+	COBOL.Test();
+
+	for (auto obj : COBOL.getResult())
+	{
+		std::cout << obj << std::endl;
 	}
 
 
