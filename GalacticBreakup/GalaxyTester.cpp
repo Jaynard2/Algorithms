@@ -25,19 +25,13 @@ void GalaxyTester::AddEvent(std::vector<int> evt) {
 		evt[i - 1] = evt[i];
 	}
 	evt.erase(--evt.end());
-	//store a representative to the kingdom
-	_Timeline.push(evt[0]);
-	//pass the kingdom to the galaxy map for initalization
-	_GM.addKingdom(evt);
+	_Timeline.push(evt);
 }
 
 bool GalaxyTester::Test() {
-	//intialize map for test
-	_GM.createEmpireSets();
 	_result.push_back((int)(!_GM.empireConncted()));
 
 	while (_Timeline.size() > 0) {
-		//walking in reverse order, this addes the kingdom back to the empire
 		_GM.mergeKingdom(_Timeline.top());
 		_Timeline.pop();
 
