@@ -18,7 +18,6 @@
 * authors. All rights reserved.
 ********************************************************/
 
-int RunTests(std::fstream& fin, GalaxyTester& COBOL);
 std::vector<std::string> stringSplit(std::string& in, char delim = ' ');
 std::vector<int> sArraytoiArray(std::vector<std::string> in);
 
@@ -51,34 +50,6 @@ int main()
 
 
 	return 0;
-}
-
-int RunTests(std::fstream& fin, GalaxyTester& COBOL) {
-	uint32_t testnumber = 0;
-	std::string temp = "";
-	if (!fin.fail() || !fin.eof()) {
-		std::getline(fin, temp);
-		testnumber = std::stoi(temp);
-		if (testnumber < 0) {
-			return -1;
-		}
-	}
-	for (int i = 0; i < testnumber && !fin.fail() && !fin.eof(); i++) {
-		temp = "";
-		std::getline(fin, temp);
-		auto params = sArraytoiArray(stringSplit(temp, ' '));
-		if (params.size() < 4) {
-			return -2;
-		}
-		COBOL.initTest(params[0], params[1], params[2]);
-		for (int j = 0; j < params[3] && !fin.fail() && !fin.eof(); j++) {
-			temp = "";
-			std::getline(fin, temp);
-			COBOL.AddEvent(sArraytoiArray(stringSplit(temp, ' ')));
-		}
-		COBOL.Test();
-	}
-	fin.close();
 }
 
 std::vector<std::string> stringSplit(std::string& in, char delim) 
