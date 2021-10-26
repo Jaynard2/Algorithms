@@ -5,6 +5,19 @@
 #include <fstream>
 #include "GalexyTester.h"
 
+/*********************************************************
+* Summary: The bottom up implementation for counting coins.
+*
+* Author: Nathanael Cook
+* Created: Oct 2021
+*
+* Main class for reading in a test file and parasing it. Once input is parsed then
+* it is passed to the tester.
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
+
 int RunTests(std::fstream& fin, GalaxyTester& COBOL);
 std::vector<std::string> stringSplit(std::string& in, char delim = ' ');
 std::vector<int> sArraytoiArray(std::vector<std::string> in);
