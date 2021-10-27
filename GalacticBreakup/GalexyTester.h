@@ -23,7 +23,7 @@ public:
 	bool Test();
 	std::vector<int> getResult() { return _result; }
 private:
-	std::stack<int> _Timeline;
+	std::stack<std::vector<int>> _Timeline;
 	GalaxyMap _GM;
 	std::vector<int> _result;
 };
