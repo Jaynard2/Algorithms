@@ -9,7 +9,7 @@ bool RushHourTester::Test() {
 		buildBoard(obj.first);
 		for (int i = 0; i < obj.first.length(); i++) {
 			Position current = unHash(obj.first[i]);
-			if (shift(current)) {
+			if (shift(current)) { //Returns True if Read Car Escaps
 				_SearchResults.insert(SearchBoard(), obj.first);
 				return true;
 			}
