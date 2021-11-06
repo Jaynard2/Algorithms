@@ -11,6 +11,9 @@ enum Vehichle {
 
 class RushHourTester {
 public:
+	RushHourTester() {
+		resetBoard();
+	}
 
 	void addVehicle(int x, int y, char orient, Vehichle type);
 	bool Test();
@@ -26,4 +29,6 @@ private:
 	void unHash(char pos);
 	std::string SearchBoard();
 	void buildBoard(std::string);
+
+	void resetBoard();
 };
