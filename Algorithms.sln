@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Midterm", "Midterm\Midterm.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GalacticBreakup", "GalacticBreakup\GalacticBreakup.vcxproj", "{2BAAB8A9-2D2F-4625-B2A8-9D22F838E57A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RushHour", "RushHour\RushHour.vcxproj", "{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{2BAAB8A9-2D2F-4625-B2A8-9D22F838E57A}.Release|x64.Build.0 = Release|x64
 		{2BAAB8A9-2D2F-4625-B2A8-9D22F838E57A}.Release|x86.ActiveCfg = Release|Win32
 		{2BAAB8A9-2D2F-4625-B2A8-9D22F838E57A}.Release|x86.Build.0 = Release|Win32
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Debug|x64.ActiveCfg = Debug|x64
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Debug|x64.Build.0 = Debug|x64
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Debug|x86.ActiveCfg = Debug|Win32
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Debug|x86.Build.0 = Debug|Win32
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Release|x64.ActiveCfg = Release|x64
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Release|x64.Build.0 = Release|x64
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Release|x86.ActiveCfg = Release|Win32
+		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
