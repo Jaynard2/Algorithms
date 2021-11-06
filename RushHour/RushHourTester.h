@@ -9,6 +9,13 @@ enum Vehichle {
 	Red = 4
 };
 
+struct Position {
+	int x;
+	int y;
+	char orient;
+	Vehichle type;
+};
+
 class RushHourTester {
 public:
 	RushHourTester() {
@@ -21,14 +28,15 @@ public:
 	std::string popError();
 
 private:
-	std::map<std::string, std::pair<int, std::string>> _SearchResults;
+	std::map<std::string, std::string> _SearchResults;
 	std::string _Error;
 	int _Board[7][7];
 
-	char cordianteHash(int x, int y, char orient, Vehichle type);
-	void unHash(char pos);
+	unsigned char cordianteHash(int x, int y, char orient, Vehichle type);
+	void unHash(unsigned char pos);
 	std::string SearchBoard();
 	void buildBoard(std::string);
+	bool shift(Position pos);
 
 	void resetBoard();
 };
