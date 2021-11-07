@@ -3,10 +3,10 @@
 
 bool RushHourTester::Test() {
 	std::string base = "";
-	_SearchResults.insert(SearchBoard(), base);
+	_SearchResults.insert(std::make_pair(SearchBoard(), base));
 
 	for (auto obj : _SearchResults) {
-		//buildBoard(obj.first);
+		buildBoard(obj.first);
 		for (int i = 0; i < obj.first.length(); i++) {
 			Position current = unHash(obj.first[i]);
 			auto result = shift(current, obj.first);
@@ -20,12 +20,12 @@ bool RushHourTester::Test() {
 
 void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
 	if (orient == 'h') {
-		for (int i = x; i < type; i++) {
+		for (int i = x; i <= type; i++) {
 			_Board[i][y] = type;
 		}
 	}
 	else if (orient == 'v') {
-		for (int j = y; j < type; j++) {
+		for (int j = y; j <= type; j++) {
 			_Board[x][j] = type + 10;
 		}
 	}
@@ -40,7 +40,7 @@ std::string RushHourTester::popError() {
 	return temp;
 }
 
-unsigned char RushHourTester::cordianteHash(int x, int y, char orient, Vehicle type) 
+unsigned char RushHourTester::coordinateHash(int x, int y, char orient, Vehicle type) 
 {
 	bool isRed = type == Red;
 	unsigned char val = (x << 5) + (y << 2) + ((orient == 'v') << 1) + (type - 2) * !isRed;
@@ -83,19 +83,21 @@ std::string RushHourTester::SearchBoard() {
 			else if (val > 10) {
 				//vertial
 				val -= 10;
-				BoardHash += cordianteHash(i, j, 'v', (Vehicle)val);
+				BoardHash += coordinateHash(i, j, 'v', (Vehicle)val);
 				for (int k = j; k < (j + val); k++) {
 					_Board[i][k] = 0;
 				}
 			}
 			else {
-				BoardHash += cordianteHash(i, j, 'h', (Vehicle)val);
+				BoardHash += coordinateHash(i, j, 'h', (Vehicle)val);
 				for (int k = i; k < (i + val); k++) {
 					_Board[k][j] = 0;
 				}
 			}
 		}
 	}
+
+	return "";
 }
 void RushHourTester::buildBoard(std::string input) {
 	for (int i = 0; i < input.length(); i++) {
@@ -120,7 +122,7 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(pos.x, i, pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) != _SearchResults.end()) {
-					_SearchResults.insert(test, parent);
+					_SearchResults.insert(std::make_pair(test, parent));
 				}
 			}
 			else {
@@ -135,7 +137,7 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(pos.x, i, pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) != _SearchResults.end()) {
-					_SearchResults.insert(test, parent);
+					_SearchResults.insert(std::make_pair(test, parent));
 				}
 			}
 			else {
@@ -153,7 +155,7 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(i, pos.y, pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) != _SearchResults.end()) {
-					_SearchResults.insert(test, parent);
+					_SearchResults.insert(std::make_pair(test, parent));
 				}
 			}
 			else {
@@ -168,7 +170,7 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(i, pos.y, pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) != _SearchResults.end()) {
-					_SearchResults.insert(test, parent);
+					_SearchResults.insert(std::make_pair(test, parent));
 				}
 				if (pos.type == Red && i == 6) {
 					return test;

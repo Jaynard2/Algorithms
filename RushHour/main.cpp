@@ -7,7 +7,7 @@ int main()
 {
 	RushHourTester game;
 
-	/*unsigned numCars;
+	unsigned numCars;
 	std::cin >> numCars;
 
 	std::string type, color, dir;
@@ -31,7 +31,7 @@ int main()
 		}
 
 		game.addVehicle(x, y, dir.at(0), vehicle);
-	}*/
+	}
 
 	if (!game.Test())
 	{

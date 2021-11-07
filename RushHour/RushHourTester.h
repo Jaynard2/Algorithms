@@ -35,7 +35,7 @@ private:
 	std::string _Final;
 	int _Board[7][7];
 
-	unsigned char cordianteHash(int x, int y, char orient, Vehicle type);
+	unsigned char coordinateHash(int x, int y, char orient, Vehicle type);
 	Position unHash(unsigned char pos);
 	std::string SearchBoard();
 	void buildBoard(std::string);
