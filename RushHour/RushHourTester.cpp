@@ -16,6 +16,7 @@ bool RushHourTester::Test() {
 			}
 		}
 	}
+	_Error = "Solution Not Found";
 	return false;
 }
 
