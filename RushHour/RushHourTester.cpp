@@ -20,12 +20,14 @@ bool RushHourTester::Test() {
 
 void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
 	if (orient == 'h') {
-		for (int i = x; i <= type; i++) {
+		int length = x + type;
+		length -= 2 * (type == Red);
+		for (int i = x; i < length; i++) {
 			_Board[i][y] = type;
 		}
 	}
 	else if (orient == 'v') {
-		for (int j = y; j <= type; j++) {
+		for (int j = y; j < (y + type); j++) {
 			_Board[x][j] = type + 10;
 		}
 	}
