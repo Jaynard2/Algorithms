@@ -16,7 +16,6 @@ bool RushHourTester::Test() {
 			}
 		}
 	}
-
 }
 
 void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
@@ -43,16 +42,32 @@ std::string RushHourTester::popError() {
 
 unsigned char RushHourTester::cordianteHash(int x, int y, char orient, Vehicle type) 
 {
-	return (x + y * 36) * 100 + orient == 'v' * 10 + type;
+	bool isRed = type == Red;
+	unsigned char val = (x << 5) + (y << 2) + ((orient == 'v') << 1) + (type - 2) * !isRed;
+	if (isRed)
+	{
+		val |= 0x1C;
+	}
+
+	return val;
 }
 
 Position RushHourTester::unHash(unsigned char pos) 
 {
-	int x = (pos / 100) % 36;
-	int y = (pos / 100) / 36;
-	pos -= (x + y * 36) * 100;
-	char orient = ((pos / 10) ? 'v' : 'h');
-	Vehicle type = (Vehicle)(pos - 10);
+	int x = pos >> 5;
+	int y = (pos & 0x1C) >> 2;
+	Vehicle type;
+	if (y == 7)
+	{
+		type = Red;
+		y = 3;
+	}
+	else
+	{
+		type = (Vehicle)((pos & 0x01) + 2);
+	}
+	char orient = ((pos & 0x02) ? 'v' : 'h');
+	
 
 	return { x, y, orient, type };
 }
