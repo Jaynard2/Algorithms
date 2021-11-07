@@ -82,17 +82,13 @@ std::string RushHourTester::SearchBoard() {
 				//vertial
 				val -= 10;
 				BoardHash += coordinateHash(i, j, 'v', (Vehicle)val);
-				val -= 2 * (val == Red);
-				for (int k = j; k < (j + val); k++) {
-					_Board[i][k] = 0;
-				}
+				Position veh = {i, j, 'v', (Vehicle)val};
+				RemoveVehicle(veh);
 			}
 			else {
 				BoardHash += coordinateHash(i, j, 'h', (Vehicle)val);
-				val -= 2 * (val == Red);
-				for (int k = i; k < (i + val); k++) {
-					_Board[k][j] = 0;
-				}
+				Position veh = {i, j, 'h', (Vehicle)val};
+				RemoveVehicle(veh);
 			}
 		}
 	}
@@ -202,7 +198,7 @@ void RushHourTester::RemoveVehicle(Position pos) {
 
 std::vector<std::string> RushHourTester::Results() {
 	std::vector<std::string> output;
-	output.push_back(_Final);
+	
 	auto Node = _SearchResults.at(_Final);
 	while (Node != "") {
 		std::string board = "";
@@ -216,6 +212,7 @@ std::vector<std::string> RushHourTester::Results() {
 		output.push_back(board);
 		Node = _SearchResults.at(Node);
 	}
+	output.push_back("Iteration Count: ");
 
 	return output;
 }
