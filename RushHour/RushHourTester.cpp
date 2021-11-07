@@ -45,13 +45,7 @@ std::string RushHourTester::popError() {
 unsigned char RushHourTester::coordinateHash(int x, int y, char orient, Vehicle type) 
 {
 	bool isRed = type == Red;
-	unsigned char val = (x << 5) + (y << 2) + ((orient == 'v') << 1) + (type - 2) * !isRed;
-	if (isRed)
-	{
-		val |= 0x1C;
-	}
-
-	return val;
+	return (x << 5) + ((y | isRed * 7) << 2) + ((orient == 'v') << 1) + (type - 2) * !isRed;
 }
 
 Position RushHourTester::unHash(unsigned char pos) 

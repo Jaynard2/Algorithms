@@ -27,7 +27,7 @@ int main()
 		}
 		else
 		{
-			vehicle = Vehicle::Car;
+			vehicle = Vehicle::Truck;
 		}
 
 		game.addVehicle(x, y, dir.at(0), vehicle);
