@@ -14,19 +14,19 @@ int main()
 	for (unsigned i = 0; i < numCars; i++)
 	{
 		std::cin >> type >> color >> dir >> x >> y;
-		Vehichle vehicle;
+		Vehicle vehicle;
 
 		if (color == "red")
 		{
-			vehicle = Vehichle::Red;
+			vehicle = Vehicle::Red;
 		}
 		else if (type == "car")
 		{
-			vehicle = Vehichle::Car;
+			vehicle = Vehicle::Car;
 		}
 		else
 		{
-			vehicle = Vehichle::Car;
+			vehicle = Vehicle::Car;
 		}
 
 		game.addVehicle(x, y, dir.at(0), vehicle);

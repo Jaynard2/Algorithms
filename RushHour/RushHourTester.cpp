@@ -19,7 +19,7 @@ bool RushHourTester::Test() {
 
 }
 
-void RushHourTester::addVehicle(int x, int y, char orient, Vehichle type) {
+void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
 	if (orient == 'h') {
 		for (int i = x; i < type; i++) {
 			_Board[i][y] = type;
@@ -41,38 +41,20 @@ std::string RushHourTester::popError() {
 	return temp;
 }
 
-unsigned char RushHourTester::cordianteHash(int x, int y, char orient, Vehichle type) {
-	orient = (orient == 'v');
-	return ((x + (y + 10)) + (orient * 50) + ((type - 2) * 100);
+unsigned char RushHourTester::cordianteHash(int x, int y, char orient, Vehicle type) 
+{
+	return (x + y * 36) * 100 + orient == 'v' * 10 + type;
 }
 
-void RushHourTester::unHash(unsigned char pos) {
-	if (pos > 200) {
-		pos -= 200;
-		if (pos > 50) {
-			addVehicle(pos, pos, 'v', Red);
-		}
-		else {
-			addVehicle(pos, pos, 'h', Red);
-		}
-	}
-	else if (pos > 100) {
-		pos -= 100;
-		if (pos > 50) {
-			addVehicle(pos, pos, 'v', Truck);
-		}
-		else {
-			addVehicle(pos, pos, 'h', Truck);
-		}
-	}
-	else {
-		if (pos > 50) {
-			addVehicle(pos, pos, 'v', Car);
-		}
-		else {
-			addVehicle(pos, pos, 'h', Car);
-		}
-	}
+Position RushHourTester::unHash(unsigned char pos) 
+{
+	int x = (pos / 100) % 36;
+	int y = (pos / 100) / 36;
+	pos -= (x + y * 36) * 100;
+	char orient = ((pos / 10) ? 'v' : 'h');
+	Vehicle type = (Vehicle)(pos - 10);
+
+	return { x, y, orient, type };
 }
 
 std::string RushHourTester::SearchBoard() {
@@ -86,13 +68,13 @@ std::string RushHourTester::SearchBoard() {
 			else if (val > 10) {
 				//vertial
 				val -= 10;
-				BoardHash += cordianteHash(i, j, 'v', (Vehichle)val);
+				BoardHash += cordianteHash(i, j, 'v', (Vehicle)val);
 				for (int k = j; k < (j + val); k++) {
 					_Board[i][k] = 0;
 				}
 			}
 			else {
-				BoardHash += cordianteHash(i, j, 'h', (Vehichle)val);
+				BoardHash += cordianteHash(i, j, 'h', (Vehicle)val);
 				for (int k = i; k < (i + val); k++) {
 					_Board[k][j] = 0;
 				}
