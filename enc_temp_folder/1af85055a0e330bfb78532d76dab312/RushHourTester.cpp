@@ -2,20 +2,32 @@
 
 
 bool RushHourTester::Test() {
-	std::string base = "";
-	_SearchResults.insert(SearchBoard(), base);
 
-	for (auto obj : _SearchResults) {
-		buildBoard(obj.first);
-		for (int i = 0; i < obj.first.length(); i++) {
-			Position current = unHash(obj.first[i]);
-			if (shift(current)) { //Returns True if Read Car Escaps
-				_SearchResults.insert(SearchBoard(), obj.first);
-				return true;
-			}
-			_SearchResults.insert(SearchBoard(), obj.first);
-		}
-	}
+	unsigned char one = cordianteHash(1, 1, 'v', Truck);
+	Position pos = unHash(one);
+	unsigned char two = cordianteHash(2, 4, 'h', Truck);
+	pos = unHash(two);
+	unsigned char three = cordianteHash(4, 6, 'v', Car);
+	pos = unHash(three);
+	unsigned char four = cordianteHash(1, 3, 'h', Red);
+	pos = unHash(four);
+	//std::string base = "";
+	//_SearchResults.insert(SearchBoard(), base);
+
+	//for (auto obj : _SearchResults) {
+	//	buildBoard(obj.first);
+	//	for (int i = 0; i < obj.first.length(); i++) {
+	//		Position current = unHash(obj.first[i]);
+	//		if (shift(current)) { //Returns True if Read Car Escaps
+	//			_SearchResults.insert(SearchBoard(), obj.first);
+	//			return true;
+	//		}
+	//		_SearchResults.insert(SearchBoard(), obj.first);
+	//	}
+	//}
+
+	return true;
+
 }
 
 void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
@@ -96,6 +108,8 @@ std::string RushHourTester::SearchBoard() {
 			}
 		}
 	}
+
+	return "";
 }
 void RushHourTester::buildBoard(std::string input) {
 	for (int i = 0; i < input.length(); i++) {
@@ -110,6 +124,7 @@ void RushHourTester::resetBoard() {
 }
 
 bool RushHourTester::shift(Position pos) {
+	return true;
 	if (pos.type = Red) {
 	
 	}
