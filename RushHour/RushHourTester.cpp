@@ -6,14 +6,14 @@ bool RushHourTester::Test() {
 	_SearchResults.insert(SearchBoard(), base);
 
 	for (auto obj : _SearchResults) {
-		buildBoard(obj.first);
+		//buildBoard(obj.first);
 		for (int i = 0; i < obj.first.length(); i++) {
 			Position current = unHash(obj.first[i]);
-			if (shift(current)) { //Returns True if Read Car Escaps
-				_SearchResults.insert(SearchBoard(), obj.first);
+			auto result = shift(current, obj.first);
+			if (result != "") { //Returns True if Read Car Escaps	
+				_Final = result;
 				return true;
 			}
-			_SearchResults.insert(SearchBoard(), obj.first);
 		}
 	}
 
@@ -84,7 +84,8 @@ std::string RushHourTester::SearchBoard() {
 }
 void RushHourTester::buildBoard(std::string input) {
 	for (int i = 0; i < input.length(); i++) {
-		unHash(input[i]);
+		auto temp = unHash(input[i]);
+		addVehicle(temp.x, temp.y, temp.orient, temp.type);
 	}
 }
 
@@ -94,11 +95,100 @@ void RushHourTester::resetBoard() {
 	}
 }
 
-bool RushHourTester::shift(Position pos) {
-	if (pos.type = Red) {
-	
+std::string RushHourTester::shift(Position pos, std::string parent) {
+	if (pos.orient == 'v') {
+		//Vertical
+		for (int i = pos.y - 1; i > 0; i--) {
+			buildBoard(parent);
+			if (_Board[pos.x][i] == 0) {
+				RemoveVehicle(pos);
+				addVehicle(pos.x, i, pos.orient, pos.type);
+				std::string test = SearchBoard();
+				if (_SearchResults.find(test) != _SearchResults.end()) {
+					_SearchResults.insert(test, parent);
+				}
+			}
+			else {
+				break;
+			}
+			resetBoard();
+		}
+		for (int i = pos.y + pos.type; i < 7; i++) {
+			buildBoard(parent);
+			if (_Board[pos.x][i] == 0) {
+				RemoveVehicle(pos);
+				addVehicle(pos.x, i, pos.orient, pos.type);
+				std::string test = SearchBoard();
+				if (_SearchResults.find(test) != _SearchResults.end()) {
+					_SearchResults.insert(test, parent);
+				}
+			}
+			else {
+				break;
+			}
+			resetBoard();
+		}
 	}
 	else {
-	
+		//horizontal
+		for (int i = pos.x - 1; i > 0; i--) {
+			buildBoard(parent);
+			if (_Board[i][pos.y] == 0) {
+				RemoveVehicle(pos);
+				addVehicle(i, pos.y, pos.orient, pos.type);
+				std::string test = SearchBoard();
+				if (_SearchResults.find(test) != _SearchResults.end()) {
+					_SearchResults.insert(test, parent);
+				}
+			}
+			else {
+				break;
+			}
+			resetBoard();
+		}
+		for (int i = pos.x + pos.type; i < 7; i++) {
+			buildBoard(parent);
+			if (_Board[i][pos.y] == 0) {
+				RemoveVehicle(pos);
+				addVehicle(i, pos.y, pos.orient, pos.type);
+				std::string test = SearchBoard();
+				if (_SearchResults.find(test) != _SearchResults.end()) {
+					_SearchResults.insert(test, parent);
+				}
+				if (pos.type == Red && i == 6) {
+					return test;
+				}
+			}
+			else {
+				break;
+			}
+			resetBoard();
+		}
 	}
+	return "";
+}
+
+void RushHourTester::RemoveVehicle(Position pos) {
+	if (pos.orient == 'h') {
+		for (int i = pos.x; i < (pos.x + pos.type); i++) {
+			_Board[i][pos.y] = 0;
+		}
+	}
+	else {
+		for (int i = pos.y; i < (pos.y + pos.type); i++) {
+			_Board[pos.x][i] = 0;
+		}
+	}
+}
+
+std::vector<std::string> RushHourTester::Results() {
+	std::vector<std::string> output;
+	output.push_back(_Final);
+	auto Node = _SearchResults.at(_Final);
+	while (Node != "") {
+		output.push_back(Node);
+		Node = _SearchResults.at(Node);
+	}
+
+	return output;
 }
