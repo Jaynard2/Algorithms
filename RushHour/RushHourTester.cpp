@@ -43,7 +43,7 @@ std::string RushHourTester::popError() {
 unsigned char RushHourTester::cordianteHash(int x, int y, char orient, Vehicle type) 
 {
 	bool isRed = type == Red;
-	char val = (x << 5) + (y << 2) + ((orient == 'v') << 1) + (type - 2) * !isRed;
+	unsigned char val = (x << 5) + (y << 2) + ((orient == 'v') << 1) + (type - 2) * !isRed;
 	if (isRed)
 	{
 		val |= 0x1C;
