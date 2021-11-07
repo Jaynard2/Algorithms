@@ -14,7 +14,7 @@ int main()
 	unsigned x, y;
 	for (unsigned i = 0; i < numCars; i++)
 	{
-		std::cin >> type >> color >> dir >> x >> y;
+		std::cin >> type >> color >> dir >> y >> x;
 		Vehicle vehicle;
 
 		if (color == "red")
