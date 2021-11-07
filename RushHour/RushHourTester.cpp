@@ -81,12 +81,14 @@ std::string RushHourTester::SearchBoard() {
 				//vertial
 				val -= 10;
 				BoardHash += coordinateHash(i, j, 'v', (Vehicle)val);
+				val -= 2 * (val == Red);
 				for (int k = j; k < (j + val); k++) {
 					_Board[i][k] = 0;
 				}
 			}
 			else {
 				BoardHash += coordinateHash(i, j, 'h', (Vehicle)val);
+				val -= 2 * (val == Red);
 				for (int k = i; k < (i + val); k++) {
 					_Board[k][j] = 0;
 				}
