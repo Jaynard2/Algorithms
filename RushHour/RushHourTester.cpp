@@ -221,7 +221,7 @@ std::vector<std::string> RushHourTester::Results() {
 		output.push_back(board);
 		Node = _SearchResults.at(Node);
 	}
-	output.push_back("Iteration Count: ");
+	output.push_back("Iteration Count: " + std::to_string(output.size()));
 
 	return output;
 }
