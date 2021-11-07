@@ -36,6 +36,7 @@ int main()
 	if (!game.Test())
 	{
 		std::cout << game.popError() << std::endl;
+		return -3;
 	}
 
 	auto re = game.Results();
@@ -46,7 +47,6 @@ int main()
 		std::cout << *iter << " " << i++  << std::endl;
 		iter++;
 	}
-
 
 	return 0;
 }
