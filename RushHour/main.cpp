@@ -35,7 +35,7 @@ int main()
 
 	if (!game.Test())
 	{
-		std::cout << game.popError() << std::endl;
+		std::cerr << game.popError() << std::endl;
 		return -3;
 	}
 
