@@ -25,6 +25,16 @@ bool RushHourTester::Test() {
 	return false;
 }
 
+RushHourTester::RushHourTester()
+{
+	resetBoard();
+	_Final = "";
+}
+
+RushHourTester::~RushHourTester()
+{
+}
+
 void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
 	if (orient == 'h') {
 		int length = x + type;
@@ -109,9 +119,7 @@ void RushHourTester::buildBoard(std::string input) {
 }
 
 void RushHourTester::resetBoard() {
-	for (int i = 0; i < 7; i++) {
-		memset(_Board[i], 0, 7);
-	}
+	_Board.fill(std::array<int, 7> { 0 });
 }
 
 std::string RushHourTester::shift(Position pos, std::string parent) {

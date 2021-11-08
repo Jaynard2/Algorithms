@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <queue>
+#include <array>
 
 enum Vehicle {
 	Car = 2,
@@ -19,10 +20,8 @@ struct Position {
 
 class RushHourTester {
 public:
-	RushHourTester() {
-		resetBoard();
-		_Final = "";
-	}
+	RushHourTester();
+	~RushHourTester();
 
 	void addVehicle(int x, int y, char orient, Vehicle type);
 	bool Test();
@@ -36,7 +35,7 @@ private:
 
 	std::string _Error;
 	std::string _Final;
-	int _Board[7][7];
+	std::array<std::array<int, 7>, 7> _Board;
 
 	unsigned char coordinateHash(int x, int y, char orient, Vehicle type);
 	Position unHash(unsigned char pos);
