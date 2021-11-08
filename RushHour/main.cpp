@@ -30,7 +30,7 @@ int main()
 			vehicle = Vehicle::Truck;
 		}
 
-		game.addVehicle(x, y, dir.at(0), vehicle);
+		game.addVehicle(x, y, dir.at(0), vehicle, color);
 	}
 
 	if (!game.Test())
@@ -39,15 +39,7 @@ int main()
 		return -3;
 	}
 
-	auto re = game.Results();
-
-	/*auto iter = re.rbegin();
-	int i = 0;
-	while (iter != re.rend()) {
-		std::cout << *iter << " " << i++  << std::endl;
-		iter++;
-	}*/
-	std::cout << std::to_string(re.size() - 1);
+	std::cout << game;
 
 	return 0;
 }
