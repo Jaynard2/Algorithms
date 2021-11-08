@@ -323,3 +323,24 @@ void RushHourTester::RemoveVehicle(Position pos) {
 		}
 	}
 }
+
+std::vector<std::string> RushHourTester::Results() {
+	std::vector<std::string> output;
+
+	auto Node = _SearchResults.at(_Final);
+	while (Node != "") {
+		std::string board = "";
+		buildBoard(Node);
+		for (int i = 1; i < 7; i++) {
+			for (int j = 1; j < 7; j++) {
+				board += std::to_string(_Board[j][i]) + ", ";
+			}
+			board += "\n";
+		}
+		output.push_back(board);
+		Node = _SearchResults.at(Node);
+	}
+	output.push_back("Iteration Count: " + std::to_string(output.size()));
+
+	return output;
+}

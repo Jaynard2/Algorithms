@@ -25,6 +25,7 @@ public:
 
 	void addVehicle(int x, int y, char orient, Vehicle type, std::string color);
 	bool Test();
+	std::vector<std::string> Results();
 
 	std::string popError();
 
