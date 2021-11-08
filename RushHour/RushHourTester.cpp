@@ -3,18 +3,23 @@
 
 bool RushHourTester::Test() {
 	std::string base = "";
-	_SearchResults.insert(std::make_pair(SearchBoard(), base));
+	auto n = _SearchResults.emplace(SearchBoard(), base).first;
+	_work.push(n);
 
-	for (auto obj : _SearchResults) {
-		buildBoard(obj.first);
-		for (int i = 0; i < obj.first.length(); i++) {
-			Position current = unHash(obj.first[i]);
-			auto result = shift(current, obj.first);
-			if (result != "") { //Returns True if Read Car Escaps	
+	while(!_work.empty())
+	{
+		buildBoard(_work.front()->first);
+		for (int i = 0; i < _work.front()->first.length(); i++) {
+			Position current = unHash(_work.front()->first[i]);
+			auto result = shift(current, _work.front()->first);
+			if (result != "") { //Returns True if Red Car Escaps	
 				_Final = result;
 				return true;
 			}
+			
 		}
+
+		_work.pop();
 	}
 	_Error = "Solution Not Found";
 	return false;
@@ -123,7 +128,8 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(pos.x, i, pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) == _SearchResults.end()) {
-					_SearchResults.insert(std::make_pair(test, parent));
+					auto n = _SearchResults.insert(std::make_pair(test, parent)).first;
+					_work.push(n);
 				}
 			}
 			else {
@@ -137,7 +143,8 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(pos.x, (i - pos.type + 1), pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) == _SearchResults.end()) {
-					_SearchResults.insert(std::make_pair(test, parent));
+					auto n = _SearchResults.insert(std::make_pair(test, parent)).first;
+					_work.push(n);
 				}
 			}
 			else {
@@ -154,7 +161,8 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(i, pos.y, pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) == _SearchResults.end()) {
-					_SearchResults.insert(std::make_pair(test, parent));
+					auto n = _SearchResults.insert(std::make_pair(test, parent)).first;
+					_work.push(n);
 				}
 			}
 			else {
@@ -170,7 +178,8 @@ std::string RushHourTester::shift(Position pos, std::string parent) {
 				addVehicle(i - length + 1, pos.y, pos.orient, pos.type);
 				std::string test = SearchBoard();
 				if (_SearchResults.find(test) == _SearchResults.end()) {
-					_SearchResults.insert(std::make_pair(test, parent));
+					auto n = _SearchResults.insert(std::make_pair(test, parent)).first;
+					_work.push(n);
 				}
 				if (isRed && i == 6) {
 					return test;
@@ -209,7 +218,7 @@ std::vector<std::string> RushHourTester::Results() {
 		buildBoard(Node);
 		for (int i = 1; i < 7; i++) {
 			for (int j = 1; j < 7; j++) {
-				board += _Board[j][i] + ", ";
+				board += std::to_string(_Board[j][i]) + ", ";
 			}
 			board += "\n";
 		}

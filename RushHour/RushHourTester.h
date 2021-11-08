@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <queue>
 
 enum Vehicle {
 	Car = 2,
@@ -31,6 +32,8 @@ public:
 
 private:
 	std::map<std::string, std::string> _SearchResults;
+	std::queue<std::map<std::string, std::string>::iterator> _work;
+
 	std::string _Error;
 	std::string _Final;
 	int _Board[7][7];
