@@ -31,11 +31,7 @@ RushHourTester::RushHourTester()
 	_Final = "";
 }
 
-RushHourTester::~RushHourTester()
-{
-}
-
-void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
+void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type, std::string color) {
 	if (orient == 'h') {
 		int length = x + type;
 		length -= 2 * (type == Red);
@@ -45,6 +41,27 @@ void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
 	}
 	else if (orient == 'v') {
 		for (int j = y; j < (y + type); j++) {
+			_Board[x][j] = type + 10;
+		}
+	}
+
+	_colors.push_back(std::make_pair(x + y * 7, color));
+}
+
+void RushHourTester::addVehicle(int x, int y, char orient, Vehicle type) {
+	if (orient == 'h')
+	{
+		int length = x + type;
+		length -= 2 * (type == Red);
+		for (int i = x; i < length; i++)
+		{
+			_Board[i][y] = type;
+		}
+	}
+	else if (orient == 'v')
+	{
+		for (int j = y; j < (y + type); j++)
+		{
 			_Board[x][j] = type + 10;
 		}
 	}
@@ -94,7 +111,7 @@ std::string RushHourTester::SearchBoard() {
 				continue;
 			}
 			else if (val > 10) {
-				//vertial
+				//vertical
 				val -= 10;
 				BoardHash += coordinateHash(i, j, 'v', (Vehicle)val);
 				Position veh = {i, j, 'v', (Vehicle)val};
@@ -120,6 +137,100 @@ void RushHourTester::buildBoard(std::string input) {
 
 void RushHourTester::resetBoard() {
 	_Board.fill(std::array<int, 7> { 0 });
+}
+
+std::ostream& operator<<(std::ostream& strm, RushHourTester& tester)
+{
+	tester.print(strm, tester._Final);
+
+	return strm;
+}
+
+void RushHourTester::print(std::ostream& strm, std::string step, std::string next, int count)
+{
+	std::string parent = _SearchResults.at(step);
+	if (parent != "")
+	{
+		print(strm, parent, step, count + 1);
+	}
+	else
+	{
+		strm << count << ((count > 1) ? " moves:\n" : " move:\n");
+	}
+
+	if (next == "")
+	{
+		return;
+	}
+
+	char data1;
+	char data2;
+	for (unsigned i = 0; i < step.size(); i++)
+	{
+		bool found1 = false;
+		bool found2 = false;
+		for (unsigned j = 0; j < next.size(); j++)
+		{
+			if (step[i] == next[j])
+			{
+				found1 = true;
+			}
+			if (step[j] == next[i])
+			{
+				found2 = true;
+			}
+		}
+
+		if (!found1)
+		{
+			data1 = step[i];
+		}
+
+		if (!found2)
+		{
+			data2 = next[i];
+		}
+	}
+
+
+	auto pos1 = unHash(data1);
+	auto pos2 = unHash(data2);
+
+	std::string color;
+	for (auto& c : _colors)
+	{
+		char position = pos1.x + pos1.y * 7;
+		char nextPos = pos2.x + pos2.y * 7;
+		if (c.first == position)
+		{
+			c.first = nextPos;
+			color = c.second;
+		}
+	}
+
+	if (pos1.x != pos2.x)
+	{
+		if (pos1.x < pos2.x)
+		{
+			strm << color << " " << std::to_string(pos2.x - pos1.x) << " R\n";
+		}
+		else
+		{
+			strm << color << " " << std::to_string(pos1.x - pos2.x) << " L\n";
+		}
+	}
+	else
+	{
+		if (pos1.y < pos2.y)
+		{
+			strm << color << " " << std::to_string(pos2.y - pos1.y) << " D\n";
+		}
+		else
+		{
+			strm << color << " " << std::to_string(pos1.y - pos2.y) << " U\n";
+		}
+	}
+	
 }
 
 std::string RushHourTester::shift(Position pos, std::string parent) {
@@ -211,25 +322,4 @@ void RushHourTester::RemoveVehicle(Position pos) {
 			_Board[pos.x][i] = 0;
 		}
 	}
-}
-
-std::vector<std::string> RushHourTester::Results() {
-	std::vector<std::string> output;
-	
-	auto Node = _SearchResults.at(_Final);
-	while (Node != "") {
-		std::string board = "";
-		buildBoard(Node);
-		for (int i = 1; i < 7; i++) {
-			for (int j = 1; j < 7; j++) {
-				board += std::to_string(_Board[j][i]) + ", ";
-			}
-			board += "\n";
-		}
-		output.push_back(board);
-		Node = _SearchResults.at(Node);
-	}
-	output.push_back("Iteration Count: " + std::to_string(output.size()));
-
-	return output;
 }
