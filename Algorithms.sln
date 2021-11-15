@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GalacticBreakup", "Galactic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RushHour", "RushHour\RushHour.vcxproj", "{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RoadScholar", "RoadScholar\RoadScholar.vcxproj", "{3E55FB94-5B0D-4014-95AD-793FC9F846B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Release|x64.Build.0 = Release|x64
 		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Release|x86.ActiveCfg = Release|Win32
 		{369B9265-85C0-4CB8-9BCB-82AB8D5B2D04}.Release|x86.Build.0 = Release|Win32
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Debug|x64.ActiveCfg = Debug|x64
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Debug|x64.Build.0 = Debug|x64
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Debug|x86.ActiveCfg = Debug|Win32
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Debug|x86.Build.0 = Debug|Win32
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Release|x64.ActiveCfg = Release|x64
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Release|x64.Build.0 = Release|x64
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Release|x86.ActiveCfg = Release|Win32
+		{3E55FB94-5B0D-4014-95AD-793FC9F846B7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
