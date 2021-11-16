@@ -3,6 +3,8 @@
 #include <string>
 #include "Tester.h"
 
+std::vector<std::string> Split(std::string val);
+
 int main() {
     std::string buffer;
     std::getline(std::cin, buffer);
@@ -17,24 +19,28 @@ int main() {
     for (int i = 0; i < roads; i++) {
         std::getline(std::cin, buffer);
         auto lng = Split(buffer);
-        atlas.addEdge(std::stoi(lng[0]), std::stoi(lng[1]), std::stoi(lng[2]));
+        atlas.addEdge(std::stoi(lng.at(0)), std::stoi(lng.at(1)), std::stof(lng.at(2)));
         buffer = "";
     }
-    for (int i = 0; i < roads; i++) {
+    for (int i = 0; i < cities; i++) {
         std::getline(std::cin, buffer);
         auto lng = Split(buffer);
-        atlas.addCity(std::stoi(lng[0]), lng[1]);
+        atlas.addCity(std::stoi(lng.at(0)), lng.at(1));
         buffer = "";
     }
 
     std::getline(std::cin, buffer);
     int SignNum = std::stoi(buffer);
-    std::vector<int[3]> Signs;
+    std::vector<std::vector<float>> Signs;
     buffer = "";
     for (int i = 0; i < SignNum; i++) {
         std::getline(std::cin, buffer);
         auto segments = Split(buffer);
-        Signs.push_back({std::stoi(segments[0]), std::stoi(segments[1]), std::stoi(segments[2])});
+        std::vector<float> intsegments;
+        intsegments.push_back(std::stof(segments[0]));
+        intsegments.push_back(std::stof(segments[1]));
+        intsegments.push_back(std::stof(segments[2]));
+        Signs.push_back(intsegments);
         buffer = "";
     }
 
@@ -61,5 +67,6 @@ std::vector<std::string> Split(std::string val) {
             temp += val[i];
         }
     }
+    result.push_back(temp);
     return result;
 }

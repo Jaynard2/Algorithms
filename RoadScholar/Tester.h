@@ -2,26 +2,7 @@
 #include <vector>
 #include <string>
 #include <queue>
-
-class Intersection {
-public:
-	Intersection(unsigned int x, unsigned char y, unsigned char z) {
-		distance = x;
-		id = y;
-		parent = z;
-	}
-
-	float distance;
-	unsigned char id;
-	unsigned char parent;
-
-	bool operator<(Intersection val) {
-		return distance < val.distance;
-	}
-	bool operator>(Intersection val) {
-		return distance > val.distance;
-	}
-};
+#include "Intersection.h"
 
 class Tester {
 public:
@@ -40,8 +21,9 @@ private:
 	std::vector<std::vector<float>> _AdjMatrix;
 	std::vector<std::pair<unsigned char, std::string>> _Cities;
 	std::vector<Intersection*> _Parents;
-	std::priority_queue<Intersection*> _WorkingSet;
+	std::priority_queue<Intersection*, std::vector<Intersection*>, Intersection> _WorkingSet;
 	std::vector<std::string> _Result;
 
-	bool walkParent(unsigned char index, unsigned char source2);
+	bool walkParent(unsigned char index, unsigned char& source, unsigned char& source2);
+	void clear();
 };
