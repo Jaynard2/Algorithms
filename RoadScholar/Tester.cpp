@@ -1,5 +1,16 @@
 #include "Tester.h"
 #include <tuple>
+#include <algorithm>
+#include <cmath>
+/*********************************************************
+* Summary: Implemets the Test class.
+*
+* Author: Nathanael Cook
+* Created: Nov 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 
 Tester::Tester(unsigned int numJunctions) {
 	//Inistalilze the adjacentcy Matrix
@@ -45,7 +56,7 @@ bool Tester::test(unsigned char source, unsigned char source2, float distance) {
 			temp = new Intersection(0, source, source);
 		}
 		else {
-			temp = new Intersection(INT_MAX, i, INT_MAX);
+			temp = new Intersection(INT_MAX, i, CHAR_MAX);
 		}
 		//after creation add to the queue and the parent vector, this make for easy lookup and
 		//parent will hold the finished Results
@@ -58,6 +69,11 @@ bool Tester::test(unsigned char source, unsigned char source2, float distance) {
 	float newDistance = 0.0f;
 	Intersection* neighbor;
 	while (!_WorkingSet.empty()) {
+		//Force a resort
+		temp = _WorkingSet.top();
+		_WorkingSet.pop();
+		_WorkingSet.push(temp);
+
 		temp = _WorkingSet.top();
 		_WorkingSet.pop();
 
@@ -78,8 +94,37 @@ bool Tester::test(unsigned char source, unsigned char source2, float distance) {
 
 	for (auto obj : _Cities) {
 		if (walkParent(obj.first, source, source2)) {
-			_Result.push_back(obj.second + " " + std::to_string(_Parents.at(obj.first)->distance - distance));
+			_Result.push_back(std::make_pair(obj.second, roundf(_Parents.at(obj.first)->distance - distance)));
 		}
+
+		std::sort(_Result.begin(), _Result.end(), [](const auto& a, const auto& b)
+			{
+				//Sort by distance
+				if (a.second < b.second)
+				{
+					return true;
+				}
+				else if (a.second > b.second)
+				{
+					return false;
+				}
+
+				//Sort alpha if distance the same
+				unsigned i = 0;
+				while (i < a.first.length() && i < b.first.length())
+				{
+					if (a.first[i] < b.first[i])
+					{
+						return true;
+					}
+					else if (a.first[i] < b.first[i])
+					{
+						return false;
+					}
+				}
+
+				return a.first.length() < b.first.length();
+			});
 	}
 
 	return true;
@@ -103,6 +148,6 @@ bool Tester::walkParent(unsigned char index, unsigned char& source, unsigned cha
 	return walkParent(_Parents.at(index)->parent, source, source2);
 }
 
-std::vector<std::string> Tester::getResult() {
+std::vector<std::pair<std::string, float>> Tester::getResult() {
 	return _Result;
 }

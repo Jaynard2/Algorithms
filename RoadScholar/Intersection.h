@@ -1,4 +1,14 @@
 #pragma once
+/*********************************************************
+* Summary: Data structure for the city nodes and operator overloads used for
+* sorting.
+*
+* Author: Nathanael Cook
+* Created: Nov 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 
 class Intersection {
 public:

@@ -1,9 +1,51 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstring>
 #include "Tester.h"
 
+/*********************************************************
+* Summary: Entry point of the program. Initializes the Tester class, takes input,
+* and displays the final results.
+*
+* Author: Nathanael Cook
+* Created: Nov 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
+
 std::vector<std::string> Split(std::string val);
+/* Screwed up test case on Gradel
+10 17 5
+0 1 5.2
+0 4 7.7
+1 2 8.1
+1 3 3.3
+2 4 1.3
+2 6 6.6
+3 6 4.2
+3 9 8.6
+4 5 4.4
+4 7 5.5
+5 6 2.3
+5 7 3.3
+6 7 7.0
+6 8 2.1
+6 9 2.2
+7 8 4.4
+8 9 6.6
+0 AA
+3 BB
+5 CC
+7 DD
+9 EE
+4
+7 5 1.0
+7 4 1.0
+3 6 1.0
+0 4 1.0
+*/
 
 int main() {
     std::string buffer;
@@ -47,10 +89,23 @@ int main() {
     for (int i = 0; i < Signs.size(); i++) {
         atlas.test(Signs.at(i)[0], Signs.at(i)[1], Signs.at(i)[2]);
         auto result = atlas.getResult();
+
         for (auto obj : result) {
-            std::cout << obj << std::endl;
+            char str[30] = "";
+            sprintf_s(str, "%s%s%-2.0f\0", obj.first.c_str(), std::string(20 - obj.first.length(), ' ').c_str(), obj.second);
+
+            if (str[strlen(str) - 1] == ' ')
+            {
+                str[strlen(str) - 1] = '\0';
+            }
+
+            std::cout << str << std::endl;
         }
-        std::cout << std::endl;
+
+        if (i != Signs.size() - 1)
+        {
+            std::cout << std::endl;
+        }
     }
 }
 

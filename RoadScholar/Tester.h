@@ -3,6 +3,16 @@
 #include <string>
 #include <queue>
 #include "Intersection.h"
+/*********************************************************
+* Summary: Finds the distance along the shortest route using Dijkstra's
+* algorithm
+*
+* Author: Nathanael Cook
+* Created: Nov 2021
+*
+* ©Copyright Cedarville University, its Computer Science faculty, and the
+* authors. All rights reserved.
+********************************************************/
 
 class Tester {
 public:
@@ -15,14 +25,14 @@ public:
 
 	//Pase the source node of the Graph
 	bool test(unsigned char source, unsigned char source2, float distance);
-	std::vector<std::string> getResult();
+	std::vector<std::pair<std::string, float>> getResult();
 
 private:
 	std::vector<std::vector<float>> _AdjMatrix;
 	std::vector<std::pair<unsigned char, std::string>> _Cities;
 	std::vector<Intersection*> _Parents;
 	std::priority_queue<Intersection*, std::vector<Intersection*>, Intersection> _WorkingSet;
-	std::vector<std::string> _Result;
+	std::vector<std::pair<std::string, float>> _Result;
 
 	bool walkParent(unsigned char index, unsigned char& source, unsigned char& source2);
 	void clear();
