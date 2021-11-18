@@ -2,6 +2,7 @@
 #include <tuple>
 #include <algorithm>
 #include <cmath>
+#include <climits>
 /*********************************************************
 * Summary: Implemets the Test class.
 *
@@ -27,17 +28,11 @@ Tester::~Tester() {
 }
 
 void Tester::clear() {
-	Intersection* temp = nullptr;
-	while (_Parents.size() > 0) {
-		temp = _Parents.back();
-		_Parents.pop_back();
-		delete temp;
-		temp = nullptr;
-	}
+	_Parents.clear();
 	_Result.clear();
 }
 
-void Tester::addEdge(unsigned int node1, unsigned int node2, float weight) {
+void Tester::addEdge(unsigned int node1, unsigned int node2, double weight) {
 	_AdjMatrix.at(node1).at(node2) = weight;
 	_AdjMatrix.at(node2).at(node1) = weight;
 }
@@ -46,36 +41,29 @@ void Tester::addCity(unsigned char index, std::string Cty) {
 	_Cities.push_back(std::pair<unsigned char, std::string>(index, Cty));
 }
 
-bool Tester::test(unsigned char source, unsigned char source2, float distance) {
+bool Tester::test(unsigned char source, unsigned char source2, double distance) {
 	//Initalize Data class
 	clear();
 	Intersection* temp = nullptr;
 	for (int i = 0; i < _AdjMatrix.size(); i++) {
 		//set all distances and parents to int Max except the source so it will be at the top of the queue
 		if (i == source) {
-			temp = new Intersection(0, source, source);
+			_Parents.push_back(Intersection(0, source, source));
 		}
 		else {
-			temp = new Intersection(INT_MAX, i, CHAR_MAX);
+			_Parents.push_back(Intersection(INT_MAX, i, CHAR_MAX));
 		}
 		//after creation add to the queue and the parent vector, this make for easy lookup and
 		//parent will hold the finished Results
-		_WorkingSet.push(temp);
-		_Parents.push_back(temp);
-		temp = nullptr;
+		_WorkingSet.push_back(&_Parents.back());
 	}
 
-	std::vector<float> edges;
-	float newDistance = 0.0f;
+	std::vector<double> edges;
+	double newDistance = 0.0;
 	Intersection* neighbor;
 	while (!_WorkingSet.empty()) {
-		//Force a resort
-		temp = _WorkingSet.top();
-		_WorkingSet.pop();
-		_WorkingSet.push(temp);
-
-		temp = _WorkingSet.top();
-		_WorkingSet.pop();
+		temp = sort(_WorkingSet.begin(), _WorkingSet.end());
+		_WorkingSet.pop_back();
 
 		edges = _AdjMatrix.at(temp->id);
 		for (int i = 0; i < edges.size(); i++) {
@@ -84,7 +72,7 @@ bool Tester::test(unsigned char source, unsigned char source2, float distance) {
 			}
 
 			newDistance = temp->distance + edges.at(i);
-			neighbor = _Parents.at(i);
+			neighbor = &_Parents.at(i);
 			if (newDistance < neighbor->distance) {
 				neighbor->distance = newDistance;
 				neighbor->parent = temp->id;
@@ -94,10 +82,10 @@ bool Tester::test(unsigned char source, unsigned char source2, float distance) {
 
 	for (auto obj : _Cities) {
 		if (walkParent(obj.first, source, source2)) {
-			_Result.push_back(std::make_pair(obj.second, roundf(_Parents.at(obj.first)->distance - distance)));
+			_Result.push_back(std::make_pair(obj.second, roundf(_Parents.at(obj.first).distance - distance)));
 		}
 
-		std::sort(_Result.begin(), _Result.end(), [](const auto& a, const auto& b)
+		std::sort(_Result.begin(), _Result.end(), [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b)
 			{
 				//Sort by distance
 				if (a.second < b.second)
@@ -133,7 +121,7 @@ bool Tester::test(unsigned char source, unsigned char source2, float distance) {
 bool Tester::walkParent(unsigned char index, unsigned char& source, unsigned char& source2) {
 	if (index == source2) {
 		//base case
-		auto nextNode = _Parents.at(_Parents.at(index)->parent);
+		auto nextNode = &_Parents.at(_Parents.at(index).parent);
 		//source parent is set to itsself
 		if (nextNode->parent == source) {
 			return true;
@@ -145,9 +133,23 @@ bool Tester::walkParent(unsigned char index, unsigned char& source, unsigned cha
 	else if (index == source) {
 		return false;
 	}
-	return walkParent(_Parents.at(index)->parent, source, source2);
+	return walkParent(_Parents.at(index).parent, source, source2);
 }
 
-std::vector<std::pair<std::string, float>> Tester::getResult() {
+std::vector<std::pair<std::string, double>> Tester::getResult() {
 	return _Result;
+}
+
+Intersection* Tester::sort(std::vector<Intersection*>::iterator begin, std::vector<Intersection*>::iterator end) {
+	std::vector<Intersection*>::iterator min = begin;
+	while (begin != end) {
+		if ((*begin)->distance < (*min)->distance) {
+			min = begin;
+		}
+		begin++;
+	}
+	Intersection* temp = *min;
+	--end;
+	*min = *end;
+	return temp;
 }

@@ -13,17 +13,17 @@
 class Intersection {
 public:
 	Intersection() {
-		distance = 0;
+		distance = -0.1;
 		id = 0;
 		parent = 0;
 	}
-	Intersection(unsigned int x, unsigned char y, unsigned char z) {
+	Intersection(double x, unsigned char y, unsigned char z) {
 		distance = x;
 		id = y;
 		parent = z;
 	}
 
-	float distance;
+	double distance;
 	unsigned char id;
 	unsigned char parent;
 
